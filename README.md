@@ -2,9 +2,7 @@
 
 Plataforma web de análisis de credibilidad de noticias mediante inteligencia artificial, desarrollada como Trabajo de Fin de Ciclo del Grado Superior en Desarrollo de Aplicaciones Web. El sistema evalúa cualquier texto informativo en siete dimensiones independientes y genera un índice de credibilidad IMI (Índice de Métricas Interpretativas) de 0 a 100. Permite el uso anónimo con límite diario y ofrece historial, perfil y estadísticas a los usuarios registrados.
 
-Autora: Raquel C. — IES Fernando Wirtz Suárez · Tutor: Fernando Prado
-
-Autor : Álvaro García Graña - Senior fullstack developer.
+Autora: Raquel Comesaña Carrera — fullstack developer.
 
 ---
 
