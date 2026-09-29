@@ -1,0 +1,1269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>toVeriAI — Documentación Técnica v1.1</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1A1A1A;
+    --green: #2D6A4F;
+    --green-light: #b8d9cb;
+    --bg: #F7F5F2;
+    --card: #FDFCFB;
+    --border: #E8E4DF;
+    --muted: #888;
+    --code-bg: #1e2127;
+    --sidebar-w: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: var(--dark); font-size: 15px; line-height: 1.7; }
+
+  /* ── LAYOUT ── */
+  .layout { display: flex; min-height: 100vh; }
+
+  /* ── SIDEBAR ── */
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    background: #1c3028; color: var(--bg);
+    position: fixed; top: 0; left: 0; height: 100vh;
+    overflow-y: auto; padding: 40px 0;
+    display: flex; flex-direction: column;
+  }
+  .sidebar-logo {
+    padding: 0 28px 32px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    margin-bottom: 24px;
+  }
+  .sidebar-logo .wordmark { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 300; color: #fff; }
+  .sidebar-logo .wordmark span { color: var(--green-light); }
+  .sidebar-logo .version { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.4); margin-top: 4px; }
+  .sidebar-section { padding: 0 28px; margin-bottom: 8px; font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 20px; }
+  .sidebar a { display: block; padding: 8px 28px; color: rgba(255,255,255,0.7); text-decoration: none; font-size: 13px; transition: all 0.2s; border-left: 2px solid transparent; }
+  .sidebar a:hover, .sidebar a.active { color: #fff; border-left-color: var(--green-light); background: rgba(255,255,255,0.06); }
+
+  /* ── MAIN ── */
+  .main { margin-left: var(--sidebar-w); flex: 1; }
+
+  /* ── HERO ── */
+  .hero {
+    background: linear-gradient(135deg, #1c3028 60%, #2D6A4F);
+    color: #fff; padding: 80px 80px 72px;
+  }
+  .hero .eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--green-light); margin-bottom: 20px; display: flex; align-items: center; gap: 14px; }
+  .hero .eyebrow::before { content: ''; display: block; width: 28px; height: 1px; background: var(--green-light); }
+  .hero h1 { font-family: 'Cormorant Garamond', serif; font-size: 56px; font-weight: 300; line-height: 1.1; margin-bottom: 20px; }
+  .hero h1 em { font-style: italic; color: var(--green-light); }
+  .hero .subtitle { font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.65); max-width: 560px; line-height: 1.8; }
+  .hero .meta { margin-top: 40px; display: flex; gap: 32px; }
+  .hero .meta-item { font-size: 12px; color: rgba(255,255,255,0.4); }
+  .hero .meta-item strong { display: block; font-size: 14px; color: rgba(255,255,255,0.85); font-weight: 400; margin-bottom: 2px; }
+
+  /* ── CONTENT ── */
+  .content { padding: 64px 80px; max-width: 960px; }
+  @media (max-width: 1100px) { .content { padding: 48px 40px; } }
+  @media (max-width: 700px) { .main { margin-left: 0; } .sidebar { display: none; } .content { padding: 32px 20px; } }
+  .section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--green); }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: 38px; font-weight: 300; color: var(--dark); line-height: 1.1; margin-bottom: 32px; }
+  h3 { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: var(--dark); margin: 32px 0 16px; }
+  h4 { font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin: 24px 0 12px; }
+  p { margin-bottom: 16px; color: #444; }
+  .divider { height: 1px; background: var(--border); margin: 48px 0; }
+
+  /* ── CARDS GRID ── */
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 16px; margin: 24px 0; }
+  .card { background: var(--card); border: 1px solid var(--border); padding: 24px; }
+  .card .card-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; }
+  .card .card-title { font-size: 16px; font-weight: 500; margin-bottom: 8px; }
+  .card .card-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* ── TABLE ── */
+  .table-wrap { overflow-x: auto; margin: 20px 0; }
+  table { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  th { background: var(--green); color: #fff; padding: 10px 16px; text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+  td { padding: 10px 16px; border-bottom: 1px solid var(--border); color: #444; vertical-align: top; word-break: break-word; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) td { background: rgba(45,106,79,0.03); }
+  td code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(45,106,79,0.08); color: var(--green); padding: 2px 6px; border-radius: 2px; }
+
+  /* ── CODE BLOCKS ── */
+  pre { background: var(--code-bg); border-radius: 4px; padding: 24px; overflow-x: auto; margin: 20px 0; }
+  pre code { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: #abb2bf; line-height: 1.7; }
+  .kw { color: #c678dd; }
+  .str { color: #98c379; }
+  .cm { color: #5c6370; font-style: italic; }
+  .num { color: #d19a66; }
+  .prop { color: #e06c75; }
+  .val { color: #61afef; }
+
+  /* ── INLINE CODE ── */
+  code { font-family: 'JetBrains Mono', monospace; font-size: 12px; background: rgba(45,106,79,0.08); color: var(--green); padding: 2px 6px; border-radius: 2px; }
+
+  /* ── BADGE ── */
+  .badge { display: inline-block; padding: 3px 10px; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; border-radius: 2px; }
+  .badge-green { background: rgba(45,106,79,0.1); color: var(--green); }
+  .badge-dark { background: var(--dark); color: #fff; }
+  .badge-amber { background: rgba(180,120,30,0.1); color: #b47820; }
+  .badge-red { background: rgba(180,50,50,0.1); color: #b43232; }
+
+  /* ── ENDPOINT BLOCK ── */
+  .endpoint { border: 1px solid var(--border); margin: 16px 0; }
+  .endpoint-header { display: flex; align-items: center; gap: 14px; padding: 14px 20px; background: var(--card); border-bottom: 1px solid var(--border); }
+  .method { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 500; padding: 4px 10px; border-radius: 2px; }
+  .method-get { background: rgba(45,106,79,0.12); color: #2D6A4F; }
+  .method-post { background: rgba(61,90,254,0.1); color: #3d5afe; }
+  .method-delete { background: rgba(180,50,50,0.1); color: #b43232; }
+  .method-patch { background: rgba(180,120,30,0.1); color: #b47820; }
+  .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+  .endpoint-desc { padding: 14px 20px; font-size: 13.5px; color: #555; }
+
+  /* ── FLOW DIAGRAM ── */
+  .flow { background: var(--card); border: 1px solid var(--border); padding: 28px; margin: 20px 0; }
+  .flow pre { background: none; padding: 0; margin: 0; }
+  .flow pre code { color: var(--dark); font-size: 13px; }
+
+  /* ── IMI DIMENSIONS ── */
+  .dimensions { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 20px 0; }
+  .dim { background: var(--card); border: 1px solid var(--border); padding: 18px 20px; display: flex; gap: 16px; align-items: flex-start; }
+  .dim-num { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 300; color: var(--green); opacity: 0.5; line-height: 1; min-width: 24px; }
+  .dim-content .dim-name { font-size: 13px; font-weight: 500; margin-bottom: 4px; }
+  .dim-content .dim-desc { font-size: 12.5px; color: var(--muted); line-height: 1.5; }
+
+  /* ── SCORE BAR ── */
+  .score-scale { display: flex; margin: 20px 0; border-radius: 2px; overflow: hidden; height: 36px; }
+  .score-red { background: #e74c3c; flex: 50; display: flex; align-items: center; padding: 0 16px; color: #fff; font-size: 12px; }
+  .score-amber { background: #e67e22; flex: 25; display: flex; align-items: center; padding: 0 16px; color: #fff; font-size: 12px; }
+  .score-green { background: #27ae60; flex: 25; display: flex; align-items: center; padding: 0 16px; color: #fff; font-size: 12px; }
+
+  /* ── CALLOUT ── */
+  .callout { padding: 16px 20px; border-left: 3px solid var(--green); background: rgba(45,106,79,0.06); margin: 20px 0; font-size: 14px; }
+  .callout.warn { border-left-color: #e67e22; background: rgba(230,126,34,0.06); }
+
+  /* ── ENV VAR TABLE ── */
+  .env-table { background: #1c2a20; border-radius: 4px; padding: 20px 24px; margin: 20px 0; }
+  .env-row { display: flex; gap: 16px; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.06); font-family: 'JetBrains Mono', monospace; font-size: 12.5px; flex-wrap: wrap; }
+  .env-row:last-child { border-bottom: none; }
+  .env-key { color: #e06c75; min-width: 220px; flex-shrink: 0; }
+  .env-val { color: #98c379; word-break: break-all; }
+  .env-desc { color: #7a9e87; font-style: italic; font-family: 'DM Sans', sans-serif; font-size: 12px; width: 100%; padding-left: 220px; margin-top: -2px; }
+  @media (max-width: 700px) { .env-desc { padding-left: 0; } .env-key { min-width: 100%; } }
+
+  @media print {
+    .sidebar { display: none; }
+    .main { margin-left: 0; }
+    .hero { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    pre, .flow, .env-table { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- SIDEBAR -->
+<nav class="sidebar">
+  <div class="sidebar-logo">
+    <div class="wordmark">to<span>Veri</span>AI</div>
+    <div class="version">Documentación técnica · v1.1</div>
+  </div>
+  <div class="sidebar-section">Infraestructura</div>
+  <a href="#arquitectura">Arquitectura</a>
+  <a href="#stack">Stack tecnológico</a>
+  <a href="#entornos">Variables de entorno</a>
+  <div class="sidebar-section">Datos</div>
+  <a href="#modelo">Modelo de datos</a>
+  <a href="#entidades">Entidades</a>
+  <a href="#enums">Enums</a>
+  <div class="sidebar-section">API REST</div>
+  <a href="#auth-api">Autenticación</a>
+  <a href="#analisis-api">Análisis</a>
+  <a href="#historial-api">Historial</a>
+  <a href="#admin-api">Administración</a>
+  <div class="sidebar-section">Frontend</div>
+  <a href="#rutas">Rutas</a>
+  <a href="#componentes">Componentes</a>
+  <a href="#contextos">Contextos</a>
+  <a href="#exportacion">Exportación (tarjeta/sello/PDF)</a>
+  <div class="sidebar-section">Negocio</div>
+  <a href="#imi">Sistema IMI</a>
+  <a href="#limites">Límites y caché</a>
+  <a href="#flujos">Flujos principales</a>
+  <a href="#engagement">Racha, votos y fuentes</a>
+  <div class="sidebar-section">Servicios clave</div>
+  <a href="#analisis-service">AnalisisService</a>
+  <a href="#imi-calculator">ImiCalculator</a>
+  <a href="#ai-orchestrator">AiOrchestrator</a>
+  <a href="#veri-ai-scheduler">VeriAI Scheduler</a>
+  <a href="#aviso-email-scheduler">AvisoEmailScheduler</a>
+  <a href="#jwt-security">Seguridad JWT</a>
+  <a href="#email-service">EmailService</a>
+</nav>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="eyebrow">Documentación técnica</div>
+    <h1>toVeri<em>AI</em><br>v1.1</h1>
+    <p class="subtitle">Plataforma de verificación de credibilidad periodística basada en el Índice de Medición de Integridad (IMI). Análisis multicapa de noticias con IA generativa.</p>
+    <div class="meta">
+      <div class="meta-item"><strong>Backend</strong>Spring Boot 3.5 · Java 17</div>
+      <div class="meta-item"><strong>Frontend</strong>React 19 · Vite 8</div>
+      <div class="meta-item"><strong>Base de datos</strong>MySQL 8.0</div>
+      <div class="meta-item"><strong>IA</strong>Rotación cloud (5 proveedores) · Ollama (VeriAI)</div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- ═══ ARQUITECTURA ═══ -->
+    <div class="section" id="arquitectura">
+      <div class="section-eyebrow">Infraestructura</div>
+      <h2>Arquitectura del sistema</h2>
+      <p>toVeriAI sigue una arquitectura de tres capas desacopladas: frontend SPA, API REST y capa de datos. La IA se integra como servicios cloud externos (rotación round-robin entre 5 proveedores — ver <a href="#ai-orchestrator">AiOrchestrator</a>) con fallback opcional a modelo local (Ollama/VeriAI) cuando <code>ai.local.habilitado=true</code>.</p>
+
+      <div class="flow">
+        <pre><code>
+  ┌─────────────────────────────────────────────────────────────────┐
+  │                           INTERNET                              │
+  └────────────────┬────────────────────────────┬───────────────────┘
+                   │                            │
+           ┌───────▼──────┐            ┌────────▼───────┐
+           │    VERCEL    │            │     RENDER     │
+           │  (Frontend)  │◄──────────►│   (Backend)    │
+           │  React/Vite  │  REST/JWT  │  Spring Boot   │
+           └──────────────┘            └────────┬───────┘
+                                                │
+               ┌────────────────────────────────┼──────────────────┐
+               │                                │                  │
+        ┌──────▼──────┐               ┌─────────▼──────┐  ┌───────▼──────┐
+        │    MySQL    │               │ Rotación cloud │  │ Gmail  SMTP  │
+        │  (Base de   │               │  5 proveedores │  │  (Emails)    │
+        │    datos)   │               │ +Groq (Vision) │  └──────────────┘
+        └─────────────┘               └────────────────┘
+                                                │
+                                      ┌────────▼───────┐
+                                      │  VPS + Ollama  │
+                                      │   (VeriAI)     │
+                                      │  (opcional —   │
+                                      │ai.local.habil.)│
+                                      └────────────────┘
+        </code></pre>
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Frontend</div>
+          <div class="card-title">verinews-ai.vercel.app</div>
+          <div class="card-desc">SPA React desplegada en Vercel. Auto-deploy desde rama main. Subdominio gratuito.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">Backend</div>
+          <div class="card-title">verinews-backend-4h4u.onrender.com</div>
+          <div class="card-desc">API REST Spring Boot en Render free tier. Docker. Se duerme tras 15 min de inactividad.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">API Docs</div>
+          <div class="card-title">Swagger UI</div>
+          <div class="card-desc">Documentación interactiva en <code>/swagger-ui.html</code>. Permite probar endpoints con JWT.</div>
+        </div>
+        <div class="card">
+          <div class="card-label">CI/CD</div>
+          <div class="card-title">GitHub → Auto-deploy</div>
+          <div class="card-desc">Push a <code>main</code> dispara deploy automático en Render (backend) y Vercel (frontend).</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ STACK ═══ -->
+    <div class="section" id="stack">
+      <div class="section-eyebrow">Tecnologías</div>
+      <h2>Stack tecnológico</h2>
+
+      <h3>Backend</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tecnología</th><th>Versión</th><th>Uso</th></tr>
+          <tr><td>Spring Boot</td><td>3.5.11</td><td>Framework principal</td></tr>
+          <tr><td>Java</td><td>17</td><td>Lenguaje</td></tr>
+          <tr><td>Spring Security</td><td>6.x</td><td>Autenticación + autorización</td></tr>
+          <tr><td>Spring Data JPA</td><td>3.x</td><td>Persistencia ORM</td></tr>
+          <tr><td>Spring Mail</td><td>3.x</td><td>Envío de emails SMTP</td></tr>
+          <tr><td>MySQL Connector</td><td>8.x</td><td>Driver JDBC</td></tr>
+          <tr><td>Hibernate</td><td>6.6</td><td>ORM, ddl-auto=update</td></tr>
+          <tr><td>JJWT</td><td>0.12.6</td><td>Generación/validación JWT</td></tr>
+          <tr><td>JSoup</td><td>1.17.2</td><td>Extracción de contenido web</td></tr>
+          <tr><td>Lombok</td><td>—</td><td>Reducción de boilerplate</td></tr>
+          <tr><td>Springdoc OpenAPI</td><td>2.7.0</td><td>Swagger UI automático</td></tr>
+        </table>
+      </div>
+
+      <h3>Frontend</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tecnología</th><th>Versión</th><th>Uso</th></tr>
+          <tr><td>React</td><td>19.2</td><td>UI framework</td></tr>
+          <tr><td>Vite</td><td>8.0</td><td>Build tool + dev server</td></tr>
+          <tr><td>React Router</td><td>7.14</td><td>Routing SPA</td></tr>
+          <tr><td>Axios</td><td>1.13</td><td>Cliente HTTP</td></tr>
+          <tr><td>Recharts</td><td>3.8</td><td>Gráficos (radar, área, pie)</td></tr>
+          <tr><td>UnoCSS</td><td>66.6</td><td>Utilidades CSS</td></tr>
+        </table>
+      </div>
+
+      <h3>Integraciones externas</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Servicio</th><th>Propósito</th><th>Notas</th></tr>
+          <tr><td>Rotación cloud (5 APIs)</td><td>Análisis de credibilidad (IA)</td><td>Cerebras, Gemini, Mistral, SambaNova, Cloudflare — round-robin con failover. Cada una requiere su propia API key.</td></tr>
+          <tr><td>Groq Vision</td><td>Extracción de texto en modo IMAGEN</td><td>Modelo <code>llama-4-scout</code>. No participa en la puntuación.</td></tr>
+          <tr><td>Ollama / VeriAI</td><td>IA local opcional (VPS dedicado)</td><td>Modelo <code>llama3.2</code> por defecto (<code>ollama.modelo</code>); <code>qwen2.5vl:7b</code> para Vision. Desactivado en prod (<code>AI_LOCAL_HABILITADO=false</code>) hasta que VeriAI madure.</td></tr>
+          <tr><td>Gmail SMTP</td><td>Emails transaccionales</td><td>App Password. Sin dominio propio.</td></tr>
+          <tr><td>MySQL 8</td><td>Base de datos principal</td><td>Local en dev, externo en producción.</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ ENV VARS ═══ -->
+    <div class="section" id="entornos">
+      <div class="section-eyebrow">Configuración</div>
+      <h2>Variables de entorno</h2>
+
+      <h3>Backend (Render)</h3>
+      <div class="env-table">
+        <div class="env-row"><span class="env-key">DB_URL</span><span class="env-val">jdbc:mysql://host/verinews...</span><span class="env-desc">URL de conexión MySQL</span></div>
+        <div class="env-row"><span class="env-key">DB_USERNAME</span><span class="env-val">root</span><span class="env-desc">Usuario MySQL</span></div>
+        <div class="env-row"><span class="env-key">DB_PASSWORD</span><span class="env-val">***</span><span class="env-desc">Contraseña MySQL</span></div>
+        <div class="env-row"><span class="env-key">JWT_SECRET</span><span class="env-val">min-32-chars-secret</span><span class="env-desc">Clave de firma JWT (HMAC-SHA256)</span></div>
+        <div class="env-row"><span class="env-key">JWT_EXPIRATION_MS</span><span class="env-val">7200000</span><span class="env-desc">Expiración JWT (2 horas)</span></div>
+        <div class="env-row"><span class="env-key">MAIL_USERNAME</span><span class="env-val">web.admin.toveriai@gmail.com</span><span class="env-desc">Cuenta Gmail emisora</span></div>
+        <div class="env-row"><span class="env-key">MAIL_PASSWORD</span><span class="env-val">xxxx xxxx xxxx xxxx</span><span class="env-desc">App Password de Google</span></div>
+        <div class="env-row"><span class="env-key">GROQ_API_KEY</span><span class="env-val">gsk_...</span><span class="env-desc">Solo Groq Vision (extracción de título/texto en modo IMAGEN) — fuera de la rotación de puntuación</span></div>
+        <div class="env-row"><span class="env-key">CEREBRAS_API_KEY</span><span class="env-val">csk-...</span><span class="env-desc">Rotación de puntuación — modelo gpt-oss-120b</span></div>
+        <div class="env-row"><span class="env-key">GEMINI_API_KEY</span><span class="env-val">AIza...</span><span class="env-desc">Rotación de puntuación — modelo gemini-2.5-flash-lite</span></div>
+        <div class="env-row"><span class="env-key">MISTRAL_API_KEY</span><span class="env-val">...</span><span class="env-desc">Rotación de puntuación — modelo mistral-large-latest</span></div>
+        <div class="env-row"><span class="env-key">SAMBANOVA_API_KEY</span><span class="env-val">...</span><span class="env-desc">Rotación de puntuación — sirve DeepSeek-V3.1</span></div>
+        <div class="env-row"><span class="env-key">CLOUDFLARE_ACCOUNT_ID</span><span class="env-val">...</span><span class="env-desc">Rotación de puntuación — Cloudflare Workers AI (junto con CLOUDFLARE_API_KEY)</span></div>
+        <div class="env-row"><span class="env-key">CLOUDFLARE_API_KEY</span><span class="env-val">cfat_...</span><span class="env-desc">Rotación de puntuación — modelo @cf/meta/llama-3.3-70b-instruct-fp8-fast</span></div>
+        <div class="env-row"><span class="env-key">ALLOWED_ORIGINS</span><span class="env-val">https://verinews-ai.vercel.app</span><span class="env-desc">CORS — dominio del frontend</span></div>
+        <div class="env-row"><span class="env-key">APP_BASE_URL</span><span class="env-val">https://verinews-ai.vercel.app</span><span class="env-desc">Base URL para enlaces en emails</span></div>
+        <div class="env-row"><span class="env-key">AI_LOCAL_HABILITADO</span><span class="env-val">false</span><span class="env-desc">Activa Ollama local. false en prod hasta que VeriAI madure</span></div>
+        <div class="env-row"><span class="env-key">OLLAMA_BASE_URL</span><span class="env-val">http://vps-ip:11434</span><span class="env-desc">URL del VPS con Ollama (VeriAI)</span></div>
+        <div class="env-row"><span class="env-key">OLLAMA_MODELO</span><span class="env-val">qwen2.5:7b</span><span class="env-desc">Modelo Ollama a usar</span></div>
+        <div class="env-row"><span class="env-key">EMAIL_VERIFICACION</span><span class="env-val">false</span><span class="env-desc">false = cuentas activas sin verificar email (workaround prod — Gmail SMTP bloqueado en cloud)</span></div>
+        <div class="env-row"><span class="env-key">VERI_AI_RETRY_MAX_BATCH</span><span class="env-val">10</span><span class="env-desc">Entradas máximas por ejecución del scheduler de reintento</span></div>
+        <div class="env-row"><span class="env-key">SPRING_PROFILES_ACTIVE</span><span class="env-val">prod</span><span class="env-desc">Perfil Spring activo</span></div>
+      </div>
+
+      <h3>Frontend (Vercel)</h3>
+      <div class="env-table">
+        <div class="env-row"><span class="env-key">VITE_API_URL</span><span class="env-val">https://verinews-backend-4h4u.onrender.com</span><span class="env-desc">URL del backend</span></div>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ MODELO DATOS ═══ -->
+    <div class="section" id="modelo">
+      <div class="section-eyebrow">Base de datos</div>
+      <h2>Modelo de datos</h2>
+
+      <div class="flow">
+        <pre><code>
+  Usuario (1) ─────────────── (N) SolicitudAnalisis
+                                           │
+                                          1:1
+                                           │
+                                   ResultadoAnalisis
+                                           │
+                                      1:7 ó 1:9
+                                           │
+                                        Metrica
+                              (7 dims en modo TEXTO/IMAGEN;
+                               hasta 9 en modo URL:
+                               +TRANSPARENCIA_MEDIO
+                               +AUTORIA)
+
+  SolicitudAnalisis (1) ──── (0:1) PublicacionAnalisis
+                                           │
+                                          1:N
+                                           │
+                                    VotoPublicacion ──── (N:1) Usuario
+                                (voto global/por dimensión,
+                                 único por publicación+usuario+métrica)
+
+  Usuario (1) ──────────────── (N) Incidencia
+  Usuario (1) ──────────────── (N) FuenteSeguida
+                                (vigilancia de dominio: media IMI de
+                                 referencia + aviso de cambio pendiente)
+  EntrenamientoDataset ──────────── JobEjecucion
+  (auditoría IA, pares proveedor    (historial scheduler)
+   cloud/Ollama — ver AiOrchestrator)
+        </code></pre>
+      </div>
+    </div>
+
+    <!-- ═══ ENTIDADES ═══ -->
+    <div class="section" id="entidades">
+      <div class="section-eyebrow">Entidades JPA</div>
+      <h2>Entidades</h2>
+
+      <h3>Usuario</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>id</code></td><td>BIGINT PK</td><td>Auto-generado</td></tr>
+          <tr><td><code>username</code></td><td>VARCHAR(255) UNIQUE</td><td>Email del usuario — es el login</td></tr>
+          <tr><td><code>password</code></td><td>VARCHAR(255)</td><td>Hash BCrypt</td></tr>
+          <tr><td><code>nombre</code></td><td>VARCHAR(255)</td><td>Nombre visible en perfil</td></tr>
+          <tr><td><code>rol</code></td><td>ENUM</td><td>USER | PREMIUM | ADMIN</td></tr>
+          <tr><td><code>email_verificado</code></td><td>TINYINT(1)</td><td>false al registrar, true tras verificar</td></tr>
+          <tr><td><code>verificacion_token</code></td><td>VARCHAR(36)</td><td>UUID para link de verificación</td></tr>
+          <tr><td><code>racha_actual</code></td><td>INT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Nº de días consecutivos con al menos un análisis. Default 0</td></tr>
+          <tr><td><code>racha_ultima_fecha</code></td><td>DATE</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Último día (LocalDate) en que se sumó racha — evita incrementarla dos veces el mismo día</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:-6px;">Método de entidad <code>esRachaActivaHoy()</code>: <code>true</code> cuando <code>rachaActual &gt; 0</code>, es múltiplo de la constante <code>RACHA_UMBRAL_RECOMPENSA = 3</code> y <code>rachaUltimaFecha</code> es hoy. Detalle del bonus que activa en <a href="#engagement">Racha, votos y fuentes seguidas</a>.</p>
+
+      <h3>SolicitudAnalisis</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>id</code></td><td>BIGINT PK</td><td></td></tr>
+          <tr><td><code>contenido</code></td><td>TEXT</td><td>Texto completo del artículo o URL</td></tr>
+          <tr><td><code>tipo_entrada</code></td><td>ENUM</td><td>TEXTO | URL</td></tr>
+          <tr><td><code>fuente</code></td><td>VARCHAR(255)</td><td>URL o dominio</td></tr>
+          <tr><td><code>nombre_medio</code></td><td>VARCHAR(255)</td><td>Nombre del medio periodístico</td></tr>
+          <tr><td><code>autor</code></td><td>VARCHAR(255)</td><td>Autor del artículo</td></tr>
+          <tr><td><code>usuario_id</code></td><td>BIGINT FK</td><td>NULL para análisis anónimos</td></tr>
+          <tr><td><code>contenido_hash</code></td><td>VARCHAR(64)</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> SHA-256 del contenido realmente analizado (en URL, del HTML recién scrapeado; en TEXTO/IMAGEN, del texto tras normalizar espacios). Soporte de la detección "¿ya lo hemos analizado?" — ver <a href="#engagement">Racha, votos y fuentes seguidas</a></td></tr>
+        </table>
+      </div>
+
+      <h3>ResultadoAnalisis</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>score_global</code></td><td>DOUBLE</td><td>IMI [0.0–100.0], 1 decimal</td></tr>
+          <tr><td><code>resumen</code></td><td>TEXT</td><td>Interpretación de la IA (max 500 chars)</td></tr>
+          <tr><td><code>titulo</code></td><td>VARCHAR(255)</td><td>Título neutral inferido por IA</td></tr>
+          <tr><td><code>solicitud_id</code></td><td>BIGINT FK</td><td>Relación con la solicitud</td></tr>
+        </table>
+      </div>
+
+      <h3>Metrica</h3>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>tipo</code></td><td>ENUM TipoMetrica</td><td>7 dims en modo TEXTO; hasta 9 en modo URL (+TRANSPARENCIA_MEDIO +AUTORIA)</td></tr>
+          <tr><td><code>alertas</code></td><td>INT</td><td>Gravedad 0-5</td></tr>
+          <tr><td><code>observaciones</code></td><td>TEXT</td><td>Análisis cualitativo</td></tr>
+          <tr><td><code>fragmentos_detectados</code></td><td>TEXT (JSON)</td><td>Array de citas textuales problemáticas</td></tr>
+          <tr><td><code>conceptos_detectados</code></td><td>TEXT (JSON)</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Array de conceptos/etiquetas cortas asociados a la alerta. La IA ya lo generaba en el prompt (<code>conceptos_detectados</code>) pero antes se descartaba al parsear; ahora se guarda con el mismo helper genérico que fragmentos</td></tr>
+          <tr><td><code>resultado_id</code></td><td>BIGINT FK</td><td>Pertenece a un ResultadoAnalisis</td></tr>
+        </table>
+      </div>
+
+      <h3>VotoPublicacion <span class="badge badge-green" style="font-size:10px;vertical-align:middle;">Nuevo</span></h3>
+      <p>Voto de un usuario sobre si coincide o no con la IA en una publicación del feed público — global o por dimensión.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>id</code></td><td>BIGINT PK</td><td></td></tr>
+          <tr><td><code>publicacion_id</code></td><td>BIGINT FK</td><td>PublicacionAnalisis votada</td></tr>
+          <tr><td><code>usuario_id</code></td><td>BIGINT FK</td><td>Autor del voto — solo usuarios autenticados</td></tr>
+          <tr><td><code>metrica</code></td><td>VARCHAR(30)</td><td><code>"GLOBAL"</code> (score total) o el nombre de un <code>TipoMetrica</code> (ej. <code>"SESGO"</code>). Se usa <strong>String</strong> en vez de enum + nulo porque MySQL no rechaza de forma fiable NULLs duplicados en un índice único</td></tr>
+          <tr><td><code>coincide</code></td><td>TINYINT(1)</td><td>true = "sí coincido con la IA", false = "no"</td></tr>
+          <tr><td><code>fecha</code></td><td>DATETIME</td><td></td></tr>
+        </table>
+      </div>
+      <p style="margin-top:-6px;"><code>UNIQUE(publicacion_id, usuario_id, metrica)</code> — un voto por usuario y métrica. Sin comentarios ni moderación.</p>
+
+      <h3>FuenteSeguida <span class="badge badge-green" style="font-size:10px;vertical-align:middle;">Nuevo</span></h3>
+      <p>Dominio de medio que un usuario decide vigilar ("Vigilancia de fuente"). <code>imiMedioReferencia</code> guarda la media IMI del dominio (agregada, entre todas las publicaciones aprobadas de ese dominio en el feed público) en el momento de empezar a seguirlo o la última vez que el usuario marcó el cambio como visto.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Campo</th><th>Tipo SQL</th><th>Notas</th></tr>
+          <tr><td><code>id</code></td><td>BIGINT PK</td><td></td></tr>
+          <tr><td><code>usuario_id</code></td><td>BIGINT FK</td><td></td></tr>
+          <tr><td><code>dominio</code></td><td>VARCHAR(255)</td><td></td></tr>
+          <tr><td><code>nombre_medio</code></td><td>VARCHAR(255)</td><td>Etiqueta legible, opcional</td></tr>
+          <tr><td><code>fecha_seguimiento</code></td><td>DATETIME</td><td></td></tr>
+          <tr><td><code>imi_medio_referencia</code></td><td>DOUBLE</td><td>Media IMI tomada como referencia. Null si aún no había datos suficientes</td></tr>
+          <tr><td><code>ultimo_aviso_imi_enviado</code></td><td>DATETIME</td><td>Momento en que se avisó por email del cambio actual. Null si no se ha avisado o se reinició al marcar visto — controla que <a href="#aviso-email-scheduler">AvisoEmailScheduler</a> no repita el email</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:-6px;"><code>UNIQUE(usuario_id, dominio)</code>.</p>
+    </div>
+
+    <!-- ═══ ENUMS ═══ -->
+    <div class="section" id="enums">
+      <div class="section-eyebrow">Tipos enumerados</div>
+      <h2>Enums</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Enum</th><th>Valores</th></tr>
+          <tr><td><code>Rol</code></td><td>USER · PREMIUM · ADMIN</td></tr>
+          <tr><td><code>TipoEntrada</code></td><td>TEXTO · URL</td></tr>
+          <tr><td><code>TipoMetrica</code></td><td>SEMANTICA · VERIFICACION_FACTUAL · SESGO · FUENTES · CONSISTENCIA · TONO · CIFRAS · <strong>TRANSPARENCIA_MEDIO</strong> · <strong>AUTORIA</strong></td></tr>
+          <tr><td><code>EstadoPublicacion</code></td><td>PENDIENTE · PUBLICADO · RECHAZADO</td></tr>
+          <tr><td><code>TipoIncidencia</code></td><td>ANALISIS_INCORRECTO · ERROR_TECNICO · SUGERENCIA · OTRO</td></tr>
+          <tr><td><code>EstadoIncidencia</code></td><td>PENDIENTE · EN_PROCESO · SOLUCIONADO · CERRADO</td></tr>
+        </table>
+      </div>
+      <div class="callout">El campo <code>metrica</code> de <code>VotoPublicacion</code> es deliberadamente un <code>String</code> (<code>"GLOBAL"</code> o el nombre de un <code>TipoMetrica</code>) y no un enum — así la restricción <code>UNIQUE(publicacion_id, usuario_id, metrica)</code> funciona de forma fiable en MySQL, que no garantiza unicidad entre múltiples NULLs en índices únicos.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ API AUTH ═══ -->
+    <div class="section" id="auth-api">
+      <div class="section-eyebrow">API REST</div>
+      <h2>Autenticación</h2>
+      <p>Base: <code>/api/auth</code> · Todas las rutas son públicas (no requieren JWT).</p>
+
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/auth/register</span></div>
+        <div class="endpoint-desc">
+          Registra un nuevo usuario y envía email de verificación.<br><br>
+          <strong>Body:</strong> <code>{ "username": "email@...", "password": "Min8Chars1!", "nombre": "Nombre" }</code><br>
+          <strong>Respuesta:</strong> 200 OK · 400 si el email ya existe
+        </div>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/auth/login</span></div>
+        <div class="endpoint-desc">
+          Autentica al usuario y devuelve el JWT.<br><br>
+          <strong>Respuesta:</strong> <code>{ "token": "eyJ...", "nombre": "...", "rol": "USER", "emailVerificado": true }</code>
+        </div>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-get">GET</span><span class="endpoint-path">/api/auth/verificar-email?token={uuid}</span></div>
+        <div class="endpoint-desc">Activa la cuenta mediante el token recibido por email.</div>
+      </div>
+
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/auth/reenviar-verificacion</span><span class="badge badge-dark" style="margin-left:auto;font-size:10px;">JWT requerido</span></div>
+        <div class="endpoint-desc">Reenvía el email de verificación. Aunque es ruta <code>permitAll()</code>, requiere JWT para resolver el usuario actual via <code>@AuthenticationPrincipal</code>.</div>
+      </div>
+    </div>
+
+    <!-- ═══ API ANÁLISIS ═══ -->
+    <div class="section" id="analisis-api">
+      <h2>Análisis</h2>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/analizar</span><span class="badge badge-amber" style="margin-left:auto;font-size:10px;">JWT opcional</span></div>
+        <div class="endpoint-desc">
+          Analiza un artículo y devuelve score IMI con 7 dimensiones.<br><br>
+          <strong>Body:</strong>
+          <pre style="margin-top:10px;"><code>{ "contenido": "texto o URL", "tipoEntrada": "TEXTO | URL",
+  "forzar": false, "idioma": "es" }</code></pre>
+          <strong>Límites:</strong> Anónimo 1 texto/día · USER 6 textos + 3 URL/día (+1 de cada por bonus de racha, ver <a href="#engagement">Racha, votos y fuentes seguidas</a>) · PREMIUM/Admin ilimitado<br>
+          <strong>Caché / dedupe "¿ya lo hemos analizado?":</strong> <span class="badge badge-green" style="font-size:10px;">Actualizado</span> en modo URL ya no se compara solo por URL+&lt;24h: se calcula el hash del HTML recién scrapeado y se compara contra <code>contenidoHash</code> de la última solicitud para esa misma URL. Si coincide, se devuelve el resultado guardado sin llamar a la IA; si el medio editó el artículo (hash distinto), se reanaliza y la respuesta incluye <code>contenidoActualizado: true</code> junto con el score y la fecha del análisis anterior. En TEXTO/IMAGEN el hash se calcula sobre el texto tras normalizar espacios. El cupo diario del usuario <strong>solo se descuenta si hubo llamada real a la IA</strong> — antes se descontaba también en cache-hit.
+        </div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-get">GET</span><span class="endpoint-path">/api/url-meta?url={url}</span></div>
+        <div class="endpoint-desc">Extrae metadata de una URL: título, autor, fecha, nombre del medio.</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-get">GET</span><span class="endpoint-path">/api/url-texto?url={url}</span></div>
+        <div class="endpoint-desc">Extrae el texto completo de una URL usando JSoup.</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-get">GET</span><span class="endpoint-path">/api/url-transparencia?url={url}</span></div>
+        <div class="endpoint-desc">Extrae las páginas Sobre nosotros/Legal/Contacto del dominio (usadas para las dimensiones TRANSPARENCIA_MEDIO y AUTORIA en modo URL). Endpoint de solo lectura, reusado por el script de comparación de proveedores <code>test-multi-api.py</code>.</div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/imagen/titulo</span></div>
+        <div class="endpoint-desc">
+          Modo IMAGEN, paso 1/2: sube una imagen (<code>multipart/form-data</code>, campo <code>imagen</code>, máx. 5MB, PNG/JPEG) y Groq Vision identifica/genera un título editable por el usuario antes de analizar.
+        </div>
+      </div>
+      <div class="endpoint">
+        <div class="endpoint-header"><span class="method method-post">POST</span><span class="endpoint-path">/api/analizar/imagen</span><span class="badge badge-amber" style="margin-left:auto;font-size:10px;">JWT opcional</span></div>
+        <div class="endpoint-desc">
+          Modo IMAGEN, paso 2/2: con el título confirmado, Groq Vision extrae el texto completo anclado a ese título y lo reintroduce en el pipeline de TEXTO (7 dimensiones). En background, si <code>ai.local.habilitado=true</code>, Ollama Vision (<code>qwen2.5vl:7b</code>) lee la misma imagen para comparar la fidelidad de extracción frente a Groq Vision.<br><br>
+          <strong>Body:</strong> <code>imagen</code> (file), <code>tituloNoticia</code>, <code>idioma</code><br>
+          <strong>Límites:</strong> 3/día para USER (cuota propia), ilimitado PREMIUM/ADMIN, anónimos comparten el cupo global de 1/día con TEXTO.
+        </div>
+      </div>
+    </div>
+
+    <!-- ═══ API HISTORIAL ═══ -->
+    <div class="section" id="historial-api">
+      <h2>Historial · Usuario · Publicaciones · Incidencias</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Método</th><th>Ruta</th><th>Auth</th><th>Descripción</th></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/historial</code></td><td>JWT</td><td>Mis análisis</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/historial/{id}</code></td><td>JWT</td><td>Detalle de análisis</td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/historial/{id}</code></td><td>JWT</td><td>Eliminar análisis</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/usuario/me</code></td><td>JWT</td><td>Perfil del usuario</td></tr>
+          <tr><td><span class="badge badge-amber">PATCH</span></td><td><code>/api/usuario/nombre</code></td><td>JWT</td><td>Cambiar nombre</td></tr>
+          <tr><td><span class="badge badge-amber">PATCH</span></td><td><code>/api/usuario/password</code></td><td>JWT</td><td>Cambiar contraseña</td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/usuario/me</code></td><td>JWT</td><td>Borrar cuenta y todos sus datos ("derecho al olvido")</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/usuario/activar-premium-fake</code></td><td>JWT</td><td>Simula upgrade a PREMIUM (sin pasarela de pago real)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/public/analisis</code></td><td>No</td><td>Feed público</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/public/analisis/{id}</code></td><td>No</td><td>Detalle publicado</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/compartir/{solicitudId}</code></td><td>JWT</td><td>Solicitar publicación</td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/compartir/{solicitudId}</code></td><td>JWT</td><td>Retirar solicitud de publicación</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/incidencias</code></td><td>JWT</td><td>Crear reporte</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/incidencias</code></td><td>JWT</td><td>Mis reportes</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/incidencias/notificaciones</code></td><td>JWT</td><td>Reportes con respuesta sin leer</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/incidencias/{id}/leida</code></td><td>JWT</td><td>Marcar respuesta como leída</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/incidencias/{id}/cerrar</code></td><td>JWT</td><td>Cerrar reporte propio</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/i18n</code></td><td>No</td><td>Traducciones en español desde el backend (fuente de verdad); el resto de idiomas se sirven como JSON estático en el frontend</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/public/analisis/{id}/voto</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Vota "¿coincides con la IA?" — global o por dimensión. <code>{ "metrica": "GLOBAL"|"SESGO"|..., "coincide": true }</code>. 401 si no autenticado (el feed es público, votar no)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/public/ranking-fuentes</code></td><td>No</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Ranking de dominios por media IMI y nº de análisis entre publicaciones aprobadas, con tendencia mensual (mes en curso vs. anterior)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/public/veri-ai/versiones</code></td><td>No</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Historial de versiones de VeriAI para la página pública <code>/veri-ai</code> — solo campos presentables (versión, modelo base, fecha, si es la activa)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/fuentes-seguidas</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Mis fuentes vigiladas (con media de referencia, media actual y si hay cambio)</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/fuentes-seguidas</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Empezar a seguir un dominio. <code>{ "dominio": "...", "nombreMedio": "..." }</code></td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/fuentes-seguidas/{dominio}</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Dejar de seguir un dominio</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/fuentes-seguidas/{dominio}/estado</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> <code>{ "siguiendo": true|false }</code> — para el botón seguir/dejar de seguir</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/fuentes-seguidas/{dominio}/visto</code></td><td>JWT</td><td><span class="badge badge-green" style="font-size:10px;">Nuevo</span> Marca el cambio de IMI como visto: la media actual pasa a ser la nueva referencia</td></tr>
+        </table>
+      </div>
+    </div>
+
+    <!-- ═══ API ADMIN ═══ -->
+    <div class="section" id="admin-api">
+      <h2>Administración <span class="badge badge-dark" style="font-size:11px;vertical-align:middle;">Rol ADMIN</span></h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Método</th><th>Ruta</th><th>Descripción</th></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/usuarios</code></td><td>Lista todos los usuarios con totalAnalisis</td></tr>
+          <tr><td><span class="badge badge-amber">PATCH</span></td><td><code>/api/admin/usuarios/{id}/rol</code></td><td>Cambiar rol de usuario</td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/admin/usuarios/{id}</code></td><td>Eliminar usuario y sus datos</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/estadisticas</code></td><td>IMI promedio global, dimensión con más alertas</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/solicitudes</code></td><td>Todas las solicitudes de análisis del sistema</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/publicaciones</code></td><td>Listado completo (todos los estados)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/publicaciones/pendientes</code></td><td>Análisis pendientes de aprobación</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/publicaciones/{id}/publicar</code></td><td>Aprobar análisis</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/publicaciones/{id}/rechazar</code></td><td>Rechazar con motivo</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/publicaciones/{id}/despublicar</code></td><td>Retirar una publicación ya aprobada</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/incidencias</code></td><td>Todos los reportes de usuarios</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/incidencias/{id}/estado</code></td><td>Cambiar estado (PENDIENTE→EN_PROCESO→SOLUCIONADO→CERRADO)</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/incidencias/{id}/responder</code></td><td>Responder a reporte de usuario</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/incidencias/analisis/{solicitudId}</code></td><td>Reportes asociados a un análisis</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/modelos</code></td><td>Modelos VeriAI registrados</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/veri-ai/modelos</code></td><td>Registrar modelo nuevo</td></tr>
+          <tr><td><span class="badge badge-amber">PATCH</span></td><td><code>/api/admin/veri-ai/modelos/{id}/activar</code></td><td>Activar modelo</td></tr>
+          <tr><td><span class="badge badge-amber">PATCH</span></td><td><code>/api/admin/veri-ai/modelos/{id}/desactivar</code></td><td>Desactivar modelo</td></tr>
+          <tr><td><span class="badge badge-red">DELETE</span></td><td><code>/api/admin/veri-ai/modelos/{id}</code></td><td>Eliminar modelo registrado</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/dataset</code></td><td>Tabla comparativa proveedor cloud vs Ollama (paginada)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/dataset/stats</code></td><td>Estadísticas agregadas del dataset (divergencia media, etc.)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/dataset/stats-proveedor</code></td><td>IMI medio/min/max/rango por proveedor cloud (vista <code>/admin/proveedores</code>)</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/dataset/export-sql</code></td><td>Exporta el dataset como SQL para backup/migración</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/veri-ai/dataset/import-sql</code></td><td>Importa dataset desde un dump SQL</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/jobs</code></td><td>Historial de ejecuciones del scheduler de reintento</td></tr>
+          <tr><td><span class="badge badge-green">GET</span></td><td><code>/api/admin/veri-ai/jobs/{id}</code></td><td>Detalle/progreso de una ejecución (usado para polling)</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/veri-ai/dataset/retry</code></td><td>Lanza el job de reintento manualmente (async)</td></tr>
+          <tr><td><span class="badge badge-dark">POST</span></td><td><code>/api/admin/veri-ai/jobs/{id}/cancelar</code></td><td>Cancela un job en ejecución</td></tr>
+        </table>
+      </div>
+      <p style="margin-top:10px;color:#777;font-size:13px;">Referencia interactiva completa (todos los parámetros, cuerpos y respuestas): <a href="/swagger-ui.html">Swagger UI</a>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ RUTAS FRONTEND ═══ -->
+    <div class="section" id="rutas">
+      <div class="section-eyebrow">Frontend</div>
+      <h2>Rutas de la aplicación</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Ruta</th><th>Componente</th><th>Acceso</th></tr>
+          <tr><td><code>/</code></td><td>Home / AdminPage</td><td>Público</td></tr>
+          <tr><td><code>/analizar</code></td><td>AnalisisPage</td><td>Público (con límites)</td></tr>
+          <tr><td><code>/publicado</code></td><td>FeedPublicoPage</td><td>Público</td></tr>
+          <tr><td><code>/veri-ai</code></td><td>VeriAiPage <span class="badge badge-green" style="font-size:10px;">Nuevo</span></td><td>Público — arquitectura del modelo local, objetivo del proyecto e historial de versiones vía <code>GET /api/public/veri-ai/versiones</code></td></tr>
+          <tr><td><code>/login</code> · <code>/register</code></td><td>LoginPage · RegisterPage</td><td>Público</td></tr>
+          <tr><td><code>/verificar-email</code></td><td>VerificarEmailPage</td><td>Público</td></tr>
+          <tr><td><code>/aviso-legal</code> · <code>/politica-privacidad</code> · <code>/terminos-uso</code></td><td>AvisoLegalPage · PoliticaPrivacidadPage · TerminosUsoPage</td><td>Público (enlazadas desde el Footer)</td></tr>
+          <tr><td><code>/historial</code> · <code>/estadisticas</code></td><td>HistorialPage · EstadisticasPage</td><td><span class="badge badge-dark">JWT</span></td></tr>
+          <tr><td><code>/perfil</code> · <code>/mis-incidencias</code></td><td>PerfilPage · IncidenciasPage</td><td><span class="badge badge-dark">JWT</span></td></tr>
+          <tr><td><code>/fuentes</code></td><td>FuentesPage <span class="badge badge-green" style="font-size:10px;">Nuevo</span></td><td><span class="badge badge-dark">JWT</span> (<code>&lt;UserRoute&gt;</code>) — pestañas Ranking / Qué sigues. El dato del ranking en sí es público en backend, pero la página exige login</td></tr>
+          <tr><td><code>/admin</code> · <code>/admin/usuarios</code></td><td>AdminPage · AdminUsuariosPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+          <tr><td><code>/admin/publicaciones</code> · <code>/admin/incidencias</code></td><td>PublicacionesAdminPage · AdminIncidenciasPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+          <tr><td><code>/admin/veri-ai</code></td><td>AdminVeriAiPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+          <tr><td><code>/admin/dataset</code></td><td>AdminDatasetPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+          <tr><td><code>/admin/jobs</code></td><td>AdminJobsPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+          <tr><td><code>/admin/proveedores</code></td><td>AdminProveedoresPage</td><td><span class="badge badge-red">ADMIN</span></td></tr>
+        </table>
+      </div>
+      <p style="margin-top:10px;color:#777;font-size:13px;"><span class="badge badge-green" style="font-size:10px;">Actualizado</span> Contenido más honesto en varias páginas públicas ya existentes (sin cambio de ruta ni de componente): aviso de fase beta con acceso sujeto a revisión en <code>/precios</code>; contraste "Hoy" / "Con tu ayuda" en <code>/donaciones</code> mostrando el coste real de operar VeriAI en vez del coste de las APIs cloud externas (hoy gratuitas); nueva sección "Funcionalidades free vs Premium" en <code>/como-funciona</code>.</p>
+    </div>
+
+    <!-- ═══ COMPONENTES ═══ -->
+    <div class="section" id="componentes">
+      <h2>Componentes y contextos</h2>
+      <div class="cards">
+        <div class="card"><div class="card-label">Componente</div><div class="card-title">Navbar</div><div class="card-desc">Nav principal. Menús desplegables, badge Premium, banner de verificación email, versión mobile con &lt;details&gt;.</div></div>
+        <div class="card"><div class="card-label">Componente</div><div class="card-title">UserRoute / AdminRoute</div><div class="card-desc">HOC de protección de rutas. Redirige a /login o /error si no tiene el rol requerido.</div></div>
+        <div class="card"><div class="card-label">Componente</div><div class="card-title">ReportarModal</div><div class="card-desc">Modal para crear incidencias desde el detalle de un análisis.</div></div>
+        <div class="card"><div class="card-label">Componente</div><div class="card-title">LoadingDots</div><div class="card-desc">Indicador de carga animado con puntos para operaciones asíncronas.</div></div>
+        <div class="card"><div class="card-label">Componente · Nuevo</div><div class="card-title">ShareCard / ShareSeal</div><div class="card-desc"><code>src/components/share/</code>. Tarjeta y sello IMI capturables a PNG — ver <a href="#exportacion">Exportación</a>.</div></div>
+      </div>
+    </div>
+
+    <!-- ═══ CONTEXTOS ═══ -->
+    <div class="section" id="contextos">
+      <h2>Contextos React</h2>
+      <h3>AuthContext — <code>useAuth()</code></h3>
+      <p>Gestiona la sesión del usuario. Persiste en <code>localStorage</code>.</p>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Key localStorage</th><th>Valor</th></tr>
+          <tr><td><code>token</code></td><td>JWT de sesión</td></tr>
+          <tr><td><code>username</code></td><td>Email del usuario</td></tr>
+          <tr><td><code>vn_nombre</code></td><td>Nombre visible</td></tr>
+          <tr><td><code>vn_rol</code></td><td>USER | PREMIUM | ADMIN</td></tr>
+          <tr><td><code>vn_email_verificado</code></td><td>Boolean</td></tr>
+        </table>
+      </div>
+      <p><span class="badge badge-green" style="font-size:10px;">Nuevo</span> <code>AuthContext</code> también expone en memoria (no persistidos en localStorage) <code>rachaActual</code>, <code>recompensaActivaHoy</code> y <code>fuentesConCambio</code> — poblados desde <code>PerfilDTO</code> (<code>GET /api/usuario/me</code>) — y el método <code>refrescarPerfil()</code>, invocado tras cada análisis con éxito para reflejar la racha al instante sin esperar a un remount. Ver <a href="#engagement">Racha, votos y fuentes seguidas</a>.</p>
+      <h3>TranslationContext — <code>useT()</code></h3>
+      <p>Sistema i18n con 5 idiomas: <code>es_ES</code> · <code>gl_ES</code> · <code>ca_ES</code> · <code>eu_ES</code> · <code>en_US</code>. JSON estáticos en <code>src/i18n/</code>. Key localStorage: <code>vn_locale</code>.</p>
+      <div class="callout">El cliente Axios (<code>api.js</code>) no tiene interceptor — el JWT debe pasarse manualmente en cada llamada autenticada: <code>headers: &#123; Authorization: `Bearer $&#123;token&#125;` &#125;</code></div>
+    </div>
+
+    <!-- ═══ EXPORTACIÓN (TARJETA / SELLO / PDF) ═══ -->
+    <div class="section" id="exportacion">
+      <div class="section-eyebrow">Frontend · Nuevo</div>
+      <h2>Exportación: tarjeta, sello e informe PDF</h2>
+      <p>En <code>AnalisisPage.jsx</code>, el botón <strong>"Exportar"</strong> abre un menú desplegable con las opciones <em>Tarjeta</em>, <em>Sello</em> (solo si <code>tipoEntrada === 'URL'</code>) e <em>Informe PDF</em> (solo <code>esPremium</code>) — cada una con acción de Compartir (Web Share API) o Descargar directa.</p>
+
+      <h3>Tarjeta y sello IMI — captura a PNG</h3>
+      <p>Componentes <code>ShareCard</code> y <code>ShareSeal</code> (<code>src/components/share/</code>): render de la tarjeta/sello IMI en un nodo oculto que se captura con la librería <code>html-to-image</code> (nueva dependencia frontend).</p>
+      <div class="callout warn"><strong>Gotcha resuelto:</strong> el nodo a capturar se ocultaba originalmente desplazándolo fuera de pantalla con <code>left: -10000px</code>, lo que producía capturas en blanco (el navegador no renderiza layout fiable fuera del viewport para algunas rutas de captura). Fix: ocultar con <code>overflow: hidden</code> sobre un contenedor de tamaño 0 en vez de desplazar el nodo lejos. Patrón a reutilizar si se exporta algo más a PNG en el futuro.</div>
+
+      <h3>Informe PDF (Premium)</h3>
+      <p>Implementado 100% client-side en <code>frontend/src/utils/exportPdf.js</code> con <code>jsPDF</code> (nueva dependencia, cargada con <code>import()</code> dinámico para no penalizar el bundle inicial). Reutiliza <code>imiColor</code>/<code>imiLabel</code> de <code>utils/imiColors.js</code> para que el PDF comparta paleta con la web.</p>
+      <p>Contenido: score global + resumen, metodología (texto distinto según el análisis tenga 7 o 9 dimensiones, es decir según <code>tipoEntrada</code>), detalle por dimensión con paginación automática (<code>asegurarEspacio()</code> salta de página repintando el fondo cuando no cabe el siguiente bloque). Gateado por el mismo flag <code>esPremium</code> que controla el límite de caracteres y la racha.</p>
+      <p>Ampliación posterior: desarrollo por dimensión (cómo mejorar + contexto de fondo, una entrada por cada una de las 7/9 dimensiones, sin límite de longitud fijo — nueva llamada a <a href="#ai-orchestrator">AiOrchestrator</a> con el contenido íntegro del artículo y el JSON completo del análisis como input, ver detalle en <code>prompts-ia.html</code>), información de transparencia del medio, y un botón VIP dorado de exportación rápida junto al título del análisis. Cacheado en <code>ResultadoAnalisis.desarrolloJson</code>. La comparación cloud vs VeriAI para esta generación adicional tiene su propio dataset, <code>EntrenamientoInformeExtra</code>, con pestaña propia "Informe PDF" en <code>/admin/dataset</code>.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ SISTEMA IMI ═══ -->
+    <div class="section" id="imi">
+      <div class="section-eyebrow">Sistema de puntuación</div>
+      <h2>Sistema IMI</h2>
+      <p>El <strong>Índice de Medición de Integridad (IMI)</strong> evalúa la credibilidad de un artículo en 7 dimensiones periodísticas independientes. Cada dimensión produce un score de alertas (0-5) y un análisis cualitativo.</p>
+
+      <h3>Escala global</h3>
+      <div class="score-scale">
+        <div class="score-red">0 – 49 · Credibilidad baja</div>
+        <div class="score-amber">50 – 74 · Moderada</div>
+        <div class="score-green">75 – 100 · Alta</div>
+      </div>
+
+      <h3>7 dimensiones de contenido (TEXTO y URL)</h3>
+      <div class="dimensions">
+        <div class="dim"><div class="dim-num">1</div><div class="dim-content"><div class="dim-name">Semántica</div><div class="dim-desc">Coherencia y claridad del lenguaje del autor. Solo evalúa la voz propia del periodista — nunca las citas de fuentes. Peso: 6%</div></div></div>
+        <div class="dim"><div class="dim-num">2</div><div class="dim-content"><div class="dim-name">Verificación Factual</div><div class="dim-desc">Contraste de hechos. Métrica principal: determina techo máximo en el score (alertas 3→máx 65, 4→máx 50, 5→máx 30). Peso: 26%</div></div></div>
+        <div class="dim"><div class="dim-num">3</div><div class="dim-content"><div class="dim-name">Sesgo</div><div class="dim-desc">Sesgo editorial del periodista en su propia redacción. Las declaraciones de fuentes bien atribuidas no aumentan el sesgo. Peso: 12%</div></div></div>
+        <div class="dim"><div class="dim-num">4</div><div class="dim-content"><div class="dim-name">Fuentes</div><div class="dim-desc">Calidad y atribución de fuentes. Nombre + cargo institucional = alertas 1. Fuentes vagas = alertas 2-3. Sin fuente = 2-3. Peso: 15%</div></div></div>
+        <div class="dim"><div class="dim-num">5</div><div class="dim-content"><div class="dim-name">Consistencia</div><div class="dim-desc">Coherencia interna del texto. Solo con contradicción concita ≥1. Si el texto es coherente, alertas=0. Peso: 24%</div></div></div>
+        <div class="dim"><div class="dim-num">6</div><div class="dim-content"><div class="dim-name">Tono</div><div class="dim-desc">Test de propósito: INFORMAR (0-2) vs PERSUADIR/ALARMAR (3-4). Titular sensacionalista + cuerpo neutral = alertas 3 igualmente. Peso: 12%</div></div></div>
+        <div class="dim"><div class="dim-num">7</div><div class="dim-content"><div class="dim-name">Cifras</div><div class="dim-desc">Estadísticas y datos medibles sin fuente. Números coloquiales no computan. Peso: 5%</div></div></div>
+      </div>
+
+      <h3>2 dimensiones de transparencia (solo modo URL)</h3>
+      <p>Requieren scraping de las páginas del medio (Sobre nosotros, Aviso legal, Contacto) que se realiza en el momento del análisis URL.</p>
+      <div class="dimensions">
+        <div class="dim" style="border-left: 2px solid var(--green);"><div class="dim-num">8</div><div class="dim-content"><div class="dim-name">Transparencia del Medio</div><div class="dim-desc">Evalúa si el medio identifica quién lo posee (página "Sobre nosotros") y cómo se financia (página "Aviso legal"). NewsGuard criterios 7+8. Peso URL: 10%</div></div></div>
+        <div class="dim" style="border-left: 2px solid var(--green);"><div class="dim-num">9</div><div class="dim-content"><div class="dim-name">Autoría</div><div class="dim-desc">Identificación del autor del artículo: 0=nombre+cargo, 1=nombre sin cargo, 2=seudónimo, 3=Redacción, 4=sin autor, 5=autor falso. NewsGuard criterio 9. Peso URL: 5%</div></div></div>
+      </div>
+
+      <h3>Fórmula de cálculo</h3>
+      <div class="callout">
+        <strong>Modo TEXTO (7 dims):</strong> <code>score = round(100 − Σ(min(alertas_i/5, 1) × peso_i) × 100, 1 decimal)</code><br><br>
+        <strong>Modo URL (9 dims):</strong> Pesos alineados con metodología NewsGuard (÷92.5 pts cubiertos): contenido = 81.08%, TRANSPARENCIA_MEDIO = 13.51%, AUTORIA = 5.41%. Misma fórmula.<br><br>
+        <strong>Techo duro:</strong> Si verificacion_factual = 3 → score ≤ 65. Si = 4 → score ≤ 50. Si = 5 → score ≤ 30.
+      </div>
+    </div>
+
+    <!-- ═══ LÍMITES ═══ -->
+    <div class="section" id="limites">
+      <h2>Límites y caché</h2>
+      <div class="table-wrap">
+        <table>
+          <tr><th>Tipo de usuario</th><th>Textos / día</th><th>URLs / día</th></tr>
+          <tr><td>Anónimo (por IP)</td><td>1</td><td>0</td></tr>
+          <tr><td>USER / PREMIUM</td><td>3</td><td>1</td></tr>
+          <tr><td>ADMIN</td><td>Ilimitado</td><td>Ilimitado</td></tr>
+        </table>
+      </div>
+      <div class="callout"><strong>Caché / dedupe:</strong> Si el mismo contenido (por hash, ver <a href="#analisis-api">Análisis</a>) fue analizado recientemente, el sistema devuelve el resultado existente sin llamar a la IA (ahorra tokens/cuota de los proveedores cloud) y <strong>no descuenta cupo</strong>. El parámetro <code>"forzar": true</code> omite el check.</div>
+      <div class="callout"><strong>Bonus de racha:</strong> <span class="badge badge-green" style="font-size:10px;">Nuevo</span> los usuarios registrados con una racha activa (múltiplo de 3 días) suman +1 análisis extra por tipo (texto/URL/imagen) ese día. Ver <a href="#engagement">Racha, votos y fuentes seguidas</a>.</div>
+    </div>
+
+    <!-- ═══ FLUJOS ═══ -->
+    <div class="section" id="flujos">
+      <h2>Flujos principales</h2>
+
+      <h3>Registro y verificación de email</h3>
+      <div class="flow">
+        <pre><code>
+  POST /api/auth/register
+    → Validar email único
+    → BCrypt(password)
+    → Crear Usuario { emailVerificado=false, verificacionToken=UUID }
+    → EmailService → Gmail SMTP → Email con enlace de verificación
+
+  GET /api/auth/verificar-email?token={uuid}
+    → Buscar usuario por token
+    → emailVerificado = true
+    → Usuario activo con todas las funciones
+        </code></pre>
+      </div>
+
+      <h3>Flujo de análisis</h3>
+      <div class="flow">
+        <pre><code>
+  POST /api/analizar { contenido, tipoEntrada }
+    → Validar límites (IP/JWT, +1 bonus por tipo si hay racha activa)
+    → Calcular contenidoHash (URL: hash del HTML recién scrapeado · TEXTO/IMAGEN: hash tras normalizar espacios)
+    → ¿Coincide con el hash de la última solicitud para ese mismo contenido/URL?
+        → Sí → Devolver resultado cacheado (sin llamar a la IA, sin descontar cupo)
+        → No, pero ya existía una solicitud previa → contenidoActualizado = true (se adjunta score/fecha anteriores)
+    → AiOrchestrator
+        → ai.local.habilitado=false → rotación cloud responde (Cerebras/Gemini/Mistral/SambaNova/Cloudflare)
+        → ai.local.habilitado=true  → rotación cloud responde, Ollama en background
+    → Parsear respuesta JSON → 7 métricas (+conceptos_detectados) + score + resumen + título
+    → Persistir SolicitudAnalisis { contenidoHash } + ResultadoAnalisis + 7 Metrica
+    → actualizarRacha(usuario) si hay usuario registrado
+    → Devolver AnalisisResponseDTO
+        </code></pre>
+      </div>
+
+      <h3>Ciclo de publicación</h3>
+      <div class="flow">
+        <pre><code>
+  Usuario: POST /api/compartir/{solicitudId}
+    → PublicacionAnalisis { estado = PENDIENTE }
+
+  Admin: POST /api/admin/publicaciones/{id}/publicar
+    → estado = PUBLICADO → visible en /api/public/analisis
+
+  Admin: POST /api/admin/publicaciones/{id}/rechazar { motivo }
+    → estado = RECHAZADO → notificación por email al usuario
+        </code></pre>
+      </div>
+    </div>
+
+    <!-- ═══ RACHA / VOTOS / FUENTES SEGUIDAS ═══ -->
+    <div class="section" id="engagement">
+      <div class="section-eyebrow">Negocio · Nuevo</div>
+      <h2>Racha, votos y fuentes seguidas</h2>
+      <p>Tres mecánicas de engagement añadidas sobre el core de análisis y el feed público, pensadas para dar motivos de volver sin depender solo del propio análisis.</p>
+
+      <h3>Racha de verificación</h3>
+      <p><code>Usuario.rachaActual</code> / <code>rachaUltimaFecha</code> se actualizan desde <code>AnalisisService.actualizarRacha()</code>, invocado en los 4 puntos de retorno para usuario registrado de <code>analizar()</code>/<code>analizarUrl()</code> — tanto en cache-hit como en llamada real a la IA, es decir que un análisis reciclado de caché también cuenta para la racha. Un mismo día solo suma una vez; un hueco de más de un día la reinicia a 1.</p>
+      <p>Cada 3 días de racha activa (<code>esRachaActivaHoy()</code>) se desbloquea un bonus de +1 análisis extra <em>por tipo</em> ese día, aplicado en <code>limiteRegistradoAlcanzado()</code>/<code>registradoAnalisisRestantes()</code>. Solo para usuarios registrados (USER/PREMIUM/ADMIN — en Premium/Admin el bonus es irrelevante porque ya no tienen límite). Expuesto al frontend en <code>PerfilDTO</code> (<code>GET /api/usuario/me</code>) y consumido por <code>AuthContext</code> (<code>rachaActual</code>, <code>recompensaActivaHoy</code>, <code>refrescarPerfil()</code> tras cada análisis con éxito).</p>
+
+      <h3>"¿Coincides con la IA?" — votos del feed público</h3>
+      <p>En <code>FeedPublicoDetallePage</code>, cada publicación permite votar sí/no si el usuario coincide con la IA — un voto global sobre el score total y un voto independiente por cada dimensión, vía <code>POST /api/public/analisis/&#123;id&#125;/voto</code> (401 si no autenticado). <code>FeedPublicoPage</code> muestra un badge con el % agregado de coincidencia en las tarjetas del feed. Persistido en la entidad <code>VotoPublicacion</code> — ver <a href="#entidades">Entidades</a>. Sin comentarios ni moderación: es solo una señal de contraste cuantitativa.</p>
+
+      <h3>Ranking público de fuentes</h3>
+      <p><code>RankingFuentesService</code> (endpoint público <code>GET /api/public/ranking-fuentes</code>) calcula, por dominio, la media IMI y el nº de análisis entre publicaciones aprobadas del feed público, más una tendencia mensual (mes en curso vs. anterior; ±5 pts se etiqueta como sube/baja, si no estable). Nuevas queries JPQL en <code>ResultadoAnalisisRepository</code>: <code>rankingFuentesPublicadas()</code> y <code>mediaPorDominioEntreFechas(desde, hasta)</code>. Se muestra en la pestaña "Ranking" de <code>/fuentes</code>.</p>
+
+      <h3>Vigilancia de fuente ("seguir medio")</h3>
+      <p><code>FuenteSeguidaService</code> gestiona el seguimiento de dominios (pestaña "Qué sigues" de <code>/fuentes</code>). La media que se vigila es la <strong>agregada del feed público</strong> — todas las publicaciones aprobadas de ese dominio, no solo las del propio usuario. Umbral de aviso <code>UMBRAL_CAMBIO_IMI = 10.0</code> puntos, con un mínimo de <code>MIN_ANALISIS_PARA_MEDIA = 2</code> publicaciones para considerar la media fiable.</p>
+      <pre><code><span class="cm">// FuenteSeguidaService.java — detección de cambio, usada tanto por el badge del Navbar como por AvisoEmailScheduler</span>
+<span class="kw">boolean</span> hayCambio = count &gt;= MIN_ANALISIS_PARA_MEDIA &amp;&amp; fs.getImiMedioReferencia() != <span class="kw">null</span>
+    &amp;&amp; actual != <span class="kw">null</span> &amp;&amp; Math.abs(actual - fs.getImiMedioReferencia()) &gt;= UMBRAL_CAMBIO_IMI;</code></pre>
+      <p><code>marcarVisto()</code> resetea <code>imiMedioReferencia</code> a la media actual y pone <code>ultimoAvisoImiEnviado = null</code>, para que el email del punto siguiente pueda volver a dispararse ante un cambio futuro. La query que cruza <code>ResultadoAnalisis</code> con <code>PublicacionAnalisis</code> por dominio es un <strong>theta-join sobre <code>solicitud_id</code></strong> — no hay relación inversa mapeada entre ambas entidades a nivel JPA. <code>PerfilDTO.fuentesConCambio</code> alimenta el badge de aviso en el Navbar.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ═══ SERVICIOS CLAVE ═══ -->
+
+    <div class="section" id="analisis-service">
+      <h2>AnalisisService</h2>
+      <p>Servicio central que orquesta el flujo completo de análisis: recepción, validación de límites, caché, llamada a IA, parseo y persistencia.</p>
+
+      <h3>Límites diarios (en memoria)</h3>
+      <p>Los contadores se almacenan en <code>ConcurrentHashMap</code> en memoria — no en BD. Se reinician con el servidor. Hay dos tipos:</p>
+      <pre><code><span class="cm">// Anónimos: 1 análisis/día por IP</span>
+<span class="kw">private final</span> Map&lt;String, ContadorDiario&gt; contadorAnonimos = <span class="kw">new</span> ConcurrentHashMap&lt;&gt;();
+
+<span class="cm">// Registrados: 6 texto + 3 URL + 3 imagen por día, por username (PREMIUM/ADMIN sin límite)</span>
+<span class="kw">private final</span> Map&lt;String, ContadorRegistradoDiario&gt; contadorRegistrados = <span class="kw">new</span> ConcurrentHashMap&lt;&gt;();</code></pre>
+      <p>Los roles <code>PREMIUM</code> y <code>ADMIN</code> tienen acceso ilimitado (<code>limiteRegistradoAlcanzado()</code> devuelve <code>false</code> para ellos).</p>
+
+      <h3>Lógica de caché / dedupe "¿ya lo hemos analizado?" <span class="badge badge-green" style="font-size:10px;">Actualizado</span></h3>
+      <p>Antes de llamar a la rotación cloud, el servicio compara el <code>contenidoHash</code> (SHA-256) del contenido recién obtenido contra el guardado la última vez para ese mismo contenido/URL, en vez de basarse solo en una ventana de 24h:</p>
+      <pre><code><span class="cm">// Modo URL: se compara el hash del HTML recién scrapeado contra el de la última</span>
+<span class="cm">// solicitud para esa misma URL — si el medio editó el artículo, el hash cambia</span>
+String hashActual = DigestUtils.sha256Hex(contenidoScrapeado);
+Optional&lt;SolicitudAnalisis&gt; anterior = solicitudRepo.findTopByFuenteOrderByFechaCreacionDesc(url);
+
+<span class="kw">if</span> (anterior.isPresent() && hashActual.equals(anterior.get().getContenidoHash()) && !forzar) {
+    <span class="kw">return</span> mapearResultado(anterior.get()); <span class="cm">// sin llamar a la IA, sin descontar cupo</span>
+}
+<span class="kw">if</span> (anterior.isPresent()) {
+    contenidoActualizado = <span class="kw">true</span>; <span class="cm">// se adjunta scoreAnterior + fechaAnalisisAnterior en la respuesta</span>
+}</code></pre>
+      <p>En modo TEXTO/IMAGEN el hash se calcula sobre el texto tras normalizar espacios (colapsar espacios repetidos/saltos de línea), para que variaciones triviales de formato no disparen un reanálisis innecesario. El parámetro <code>forzar: true</code> en el request omite el check en ambos casos. El cupo diario del usuario solo se descuenta cuando hubo llamada real a la IA — antes se descontaba también en cache-hit.</p>
+
+      <h3>Parseo del JSON de respuesta</h3>
+      <p>La IA devuelve un JSON con una clave por dimensión. Para cada una se crea una entidad <code>Metrica</code>:</p>
+      <pre><code><span class="kw">private</span> List&lt;Metrica&gt; parsearMetricas(String json, ResultadoAnalisis resultado) {
+    JsonNode root = mapper.readTree(json);
+    <span class="kw">for</span> (TipoMetrica tipo : TipoMetrica.values()) {
+        JsonNode nodo = root.path(tipo.getClave());  <span class="cm">// "semantica", "fuentes"…</span>
+        Metrica m = <span class="kw">new</span> Metrica();
+        m.setTipo(tipo);
+        m.setAlertas(nodo.path(<span class="str">"alertas"</span>).asInt());
+        m.setObservaciones(nodo.path(<span class="str">"observaciones"</span>).asText());
+        m.setFragmentosDetectados(arrayComoJson(nodo, <span class="str">"fragmentos_detectados"</span>));
+        m.setConceptosDetectados(arrayComoJson(nodo, <span class="str">"conceptos_detectados"</span>)); <span class="cm">// Nuevo — helper genérico</span>
+        m.setResultado(resultado);
+        metricas.add(m);
+    }
+    <span class="kw">return</span> metricas;
+}</code></pre>
+      <p><span class="badge badge-green" style="font-size:10px;">Nuevo</span> La IA ya generaba <code>conceptos_detectados</code> en el prompt (conceptos/etiquetas cortas asociados a cada alerta), pero antes se descartaba al parsear. Ahora se guarda con <code>arrayComoJson()</code>, un helper genérico que reemplaza al antiguo <code>fragmentosComoArrayJson</code> específico de un solo campo. Se mapea a <code>MetricaDTO.conceptosDetectados</code> en los 4 sitios que construyen ese DTO: <code>AnalisisController</code> (×2), <code>PublicacionService</code> (×2) y <code>HistorialService</code>. En el frontend, el panel expandible de la métrica (componente local <code>MetricBar</code>, definido en <code>AnalisisPage.jsx</code> y en <code>FeedPublicoDetallePage.jsx</code>) muestra chips de conceptos junto a las citas textuales de <code>fragmentosDetectados</code>.</p>
+
+      <h3>Racha de verificación</h3>
+      <p><code>actualizarRacha(username)</code> se invoca en los 4 puntos de retorno para usuario registrado de <code>analizar()</code>/<code>analizarUrl()</code> (cache-hit y llamada real a la IA por igual). Detalle completo en <a href="#engagement">Racha, votos y fuentes seguidas</a>.</p>
+
+      <h3>Límite de tokens de entrada</h3>
+      <div class="callout"><code>MAX_CHARS_GROQ = 24_000</code> — El contenido se trunca a este límite antes de enviarlo a la API para evitar errores de contexto excedido en el modelo.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="imi-calculator">
+      <h2>ImiCalculator</h2>
+      <p>Componente Spring (<code>@Component</code>) que calcula el IMI. Expone tres métodos: <code>calcular()</code> para 7 dims, <code>calcularUrl()</code> para 9 dims, y <code>calcularContenido()</code> para extraer el score de contenido de un análisis URL.</p>
+
+      <h3>Pesos — Modo TEXTO (7 dims, total = 100%)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dimensión</th><th>Peso</th><th>Justificación</th></tr></thead>
+          <tbody>
+            <tr><td><code>semantica</code></td><td>6%</td><td>Errores de estilo son frecuentes pero raramente indican desinformación deliberada</td></tr>
+            <tr><td><code>verificacion_factual</code></td><td><strong>26%</strong></td><td>Dimensión más crítica — afirmaciones falsas son el núcleo de la desinformación. Define el techo duro del score</td></tr>
+            <tr><td><code>sesgo</code></td><td>12%</td><td>Importante pero subjetivo — el sesgo no implica necesariamente falsedad</td></tr>
+            <tr><td><code>fuentes</code></td><td>15%</td><td>Fuentes ausentes o no verificables son señal fiable de baja calidad periodística</td></tr>
+            <tr><td><code>consistencia</code></td><td>24%</td><td>Contradicciones internas son objetivas y revelan descuido o manipulación</td></tr>
+            <tr><td><code>tono</code></td><td>12%</td><td>Alarmismo y sensacionalismo son técnicas de manipulación documentadas</td></tr>
+            <tr><td><code>cifras</code></td><td>5%</td><td>Errores numéricos son graves pero menos frecuentes en artículos comunes</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Pesos — Modo URL (9 dims, total = 100%) — Metodología NewsGuard</h3>
+      <p>Pesos normalizados sobre los 92.5 pts de NewsGuard que toVeriAI cubre (se excluye el criterio 7 — etiquetado publicitario, no automatizable). Contenido = 75/92.5 ≈ <strong>81.08%</strong>. Transparencia = 17.5/92.5 ≈ <strong>18.92%</strong>.</p>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Dimensión</th><th>Peso URL</th><th>Cálculo</th><th>Criterio NewsGuard</th></tr></thead>
+          <tbody>
+            <tr><td><code>semantica</code></td><td>4.865%</td><td>6% × 75/92.5</td><td>C2</td></tr>
+            <tr><td><code>verificacion_factual</code></td><td><strong>21.081%</strong></td><td>26% × 75/92.5</td><td>C1</td></tr>
+            <tr><td><code>sesgo</code></td><td>9.730%</td><td>12% × 75/92.5</td><td>C4</td></tr>
+            <tr><td><code>fuentes</code></td><td>12.162%</td><td>15% × 75/92.5</td><td>C2</td></tr>
+            <tr><td><code>consistencia</code></td><td>19.459%</td><td>24% × 75/92.5</td><td>C3</td></tr>
+            <tr><td><code>tono</code></td><td>9.730%</td><td>12% × 75/92.5</td><td>C5</td></tr>
+            <tr><td><code>cifras</code></td><td>4.054%</td><td>5% × 75/92.5</td><td>C2</td></tr>
+            <tr><td><code>transparencia_medio</code></td><td>13.514%</td><td>12.5/92.5</td><td>C6+C8</td></tr>
+            <tr><td><code>autoria</code></td><td>5.405%</td><td>5/92.5</td><td>C9</td></tr>
+            <tr style="font-weight:700"><td>Total</td><td>100%</td><td>Σ = 1.00000</td><td>8 de 9 criterios</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Algoritmo de cálculo</h3>
+      <pre><code><span class="kw">private static final double</span>[] PESOS = {<span class="num">0.06, 0.26, 0.12, 0.15, 0.24, 0.12, 0.05</span>};
+
+<span class="kw">private double</span> calcular(<span class="kw">int</span>[] alertas) {
+    <span class="kw">double</span> penalizacion = <span class="num">0.0</span>;
+    <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i &lt; <span class="num">7</span>; i++) {
+        <span class="cm">// Normalizar alertas a [0,1] y ponderar</span>
+        penalizacion += Math.min(alertas[i] / <span class="num">5.0</span>, <span class="num">1.0</span>) * PESOS[i];
+    }
+    <span class="kw">double</span> score = Math.round((<span class="num">100.0</span> - penalizacion * <span class="num">100.0</span>) * <span class="num">10.0</span>) / <span class="num">10.0</span>;
+
+    <span class="cm">// Techo duro: verificacion_factual grave bloquea el score máximo</span>
+    <span class="kw">if</span>      (alertas[<span class="num">1</span>] == <span class="num">5</span>) score = Math.min(score, <span class="num">30.0</span>);
+    <span class="kw">else if</span> (alertas[<span class="num">1</span>] == <span class="num">4</span>) score = Math.min(score, <span class="num">50.0</span>);
+    <span class="kw">else if</span> (alertas[<span class="num">1</span>] == <span class="num">3</span>) score = Math.min(score, <span class="num">65.0</span>);
+    <span class="kw">return</span> score;
+}</code></pre>
+      <p>El techo duro garantiza que ningún artículo con 5 alertas en verificación factual pueda superar 30 puntos, independientemente de las otras dimensiones.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="ai-orchestrator">
+      <h2>AiOrchestrator</h2>
+      <p>Servicio Spring que abstrae qué modelo IA responde a cada análisis. Desde el 2026-07-10, la llamada de puntuación (TEXTO/URL, y el paso final de IMAGEN) ya no depende de un único proveedor: rota en round-robin entre 5 APIs cloud, con failover automático si una falla.</p>
+
+      <h3>Rotación cloud: Cerebras → Gemini → Mistral → SambaNova → Cloudflare</h3>
+      <p><strong>Groq quedó fuera de esta rotación</strong> (2026-07): en pruebas con noticias falsas daba sistemáticamente notas IMI más altas (peor detección) que Cerebras/Gemini. <code>GroqAiClient</code> se mantiene, pero solo para Groq Vision (extracción de título/texto en modo IMAGEN) — eso no cambió.</p>
+      <pre><code><span class="cm">// AiOrchestrator.java — orden de preferencia, se salta el que no tenga API key</span>
+<span class="kw">this</span>.rotacionCloud = List.of(cerebras, gemini, mistral, sambanova, cloudflare);
+
+<span class="kw">private</span> RespuestaCloud completarConRotacion(String prompt, String contenido, <span class="kw">int</span> maxTokens) {
+    List&lt;AiClient&gt; disponibles = rotacionCloud.stream().filter(AiClient::disponible).toList();
+    <span class="kw">int</span> inicio = rotationIndex.getAndIncrement() % disponibles.size();
+    <span class="cm">// Prueba cada proveedor empezando por "inicio"; si uno falla (rate limit,
+    // 5xx, excepción de red) reintenta automáticamente con el siguiente</span>
+    <span class="kw">for</span> (<span class="kw">int</span> i = 0; i &lt; disponibles.size(); i++) {
+        AiClient candidato = disponibles.get((inicio + i) % disponibles.size());
+        <span class="kw">try</span> {
+            <span class="kw">return new</span> RespuestaCloud(candidato.completar(prompt, contenido, maxTokens), candidato.getModeloId());
+        } <span class="kw">catch</span> (Exception e) { <span class="cm">/* probar el siguiente */</span> }
+    }
+    <span class="kw">throw</span> ultimoError;
+}</code></pre>
+      <p>Cada <code>AiClient</code> (<code>CerebrasAiClient</code>, <code>GeminiAiClient</code>, <code>MistralAiClient</code>, <code>SambaNovaAiClient</code>, <code>CloudflareAiClient</code>) implementa <code>completar()</code>, <code>getModeloId()</code> (formato <code>"&lt;proveedor&gt;:&lt;modelo&gt;"</code>, ej. <code>cerebras:gpt-oss-120b</code>) y <code>disponible()</code> — si no hay API key configurada para uno, se salta solo de la rotación sin tocar código. Cloudflare tiene un shape de respuesta distinto (no compatible OpenAI): usa <code>account_id</code> en la URL y devuelve <code>{"result":{"response":"..."},"success":bool}</code> en vez de <code>choices[].message.content</code>.</p>
+
+      <h3>Modo solo cloud (<code>ai.local.habilitado=false</code>) — producción por defecto</h3>
+      <pre><code><span class="kw">private</span> AiRespuesta usarSoloGroq(...) { <span class="cm">// nombre heredado, ya no es solo Groq</span>
+    RespuestaCloud r = completarConRotacion(prompt, contenido, maxTokens);
+    Long id = guardarDataset(tipo, contenido, prompt, <span class="kw">null</span>, r.contenido(), <span class="kw">null</span>, r.modeloUsado(), ...);
+    <span class="kw">return new</span> AiRespuesta(r.contenido(), r.modeloUsado(), <span class="kw">false</span>, id);
+}</code></pre>
+
+      <h3>Modo orquestado (<code>ai.local.habilitado=true</code>)</h3>
+      <pre><code><span class="cm">// El proveedor cloud de turno responde al usuario; Ollama compara en background</span>
+<span class="kw">private</span> AiRespuesta usarLocalConFallback(...) {
+    RespuestaCloud r = completarConRotacion(prompt, contenido, maxTokens);
+    Long id = guardarDataset(tipo, contenido, prompt, <span class="kw">null</span>, r.contenido(), ollama.getModeloId(), r.modeloUsado(), ...);
+    lanzarOllamaAsync(id, tipo, prompt, contenido, maxTokens); <span class="cm">// no bloquea</span>
+    <span class="kw">return new</span> AiRespuesta(r.contenido(), r.modeloUsado(), <span class="kw">false</span>, id);
+}
+
+<span class="kw">private void</span> lanzarOllamaAsync(Long datasetId, String tipoEntrada, ...) {
+    CompletableFuture.runAsync(() -&gt; {
+        String respuestaLocal = ollama.completar(prompt, contenido, maxTokens);
+        <span class="kw">double</span> scoreLocal = "URL".equals(tipoEntrada) ? imiCalculator.calcularUrl(respuestaLocal) : imiCalculator.calcular(respuestaLocal);
+        <span class="cm">// Guarda scoreLocal + divergencia (|scoreLocal - scoreProveedorCloud|) en EntrenamientoDataset</span>
+        datasetRepo.findById(datasetId).ifPresent(d -&gt; { d.setRespuestaLocal(respuestaLocal); d.setScoreLocal(scoreLocal); recalcularDivergencia(d); datasetRepo.save(d); });
+    });
+}</code></pre>
+
+      <h3>Dataset de entrenamiento</h3>
+      <p>Cada análisis genera un registro en <code>entrenamiento_dataset</code> con el prompt, la respuesta del proveedor cloud que respondió (columna <code>proveedor_cloud</code>, ej. <code>"cerebras:gpt-oss-120b"</code>), el score IMI y — cuando Ollama está activo — la respuesta local y la divergencia. Este dataset es la materia prima para entrenar VeriAI.</p>
+      <p>El campo <code>prompt_sistema</code> almacena el prompt completo usado (con las 9 dims en modo URL). El job de reintento lo reutiliza para reenviar a Ollama sin repetir el análisis cloud. En modo IMAGEN, además, <code>OllamaAiClient.completarVision()</code> compara aparte si el modelo local (<code>qwen2.5vl:7b</code>) es capaz de leer la imagen igual de bien que Groq Vision — ver <code>titulo_local_imagen</code> / <code>texto_local_imagen</code> / <code>error_local_imagen</code> en el modelo de datos.</p>
+      <p>Vista <strong>/admin/proveedores</strong>: compara IMI medio, mínimo, máximo y rango (proxy de consistencia) por proveedor, con los últimos 8 resúmenes de cada uno para lectura cualitativa.</p>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="veri-ai-scheduler">
+      <h2>VeriAiRetryScheduler</h2>
+      <p>Scheduler Spring (<code>@Scheduled</code>) que reprocesa automáticamente las entradas del dataset sin respuesta local. Diseñado para ser resiliente ante reinicios del servidor: en cada arranque, el cron hourly detecta entradas pendientes y las procesa.</p>
+
+      <h3>Ciclo de ejecución</h3>
+      <div class="flow">
+        <pre><code>
+  Cada hora (cron: 0 0 * * * *)
+    → ¿AI_LOCAL_HABILITADO=false? → return (prod: no hace nada)
+    → Crear JobEjecucion { tipo="AUTOMATICO", estado="EJECUTANDO" }
+    → Buscar EntrenamientoDataset WHERE respuesta_local IS NULL
+      AND texto_input IS NOT NULL AND prompt_sistema IS NOT NULL
+      AND fecha &lt; now() - 5min  (evita colisiones con análisis en curso)
+      LIMIT VERI_AI_RETRY_MAX_BATCH (default: 10)
+    → Por cada entrada:
+        → ollama.completar(entry.promptSistema, entry.textoInput, maxTokens)
+        → Guardar respuesta_local + score_local + divergencia
+        → Actualizar procesados/errores en JobEjecucion (live progress)
+    → JobEjecucion { estado="COMPLETADO", fin=now(), detalle="N/M procesados" }
+
+  POST /api/admin/veri-ai/dataset/retry  (ejecución manual)
+    → Igual pero tipo="MANUAL" y usa CompletableFuture.runAsync()
+    → Devuelve { jobId } inmediatamente (no bloquea)
+    → Frontend hace polling: GET /api/admin/veri-ai/jobs/{id} cada 2s
+        </code></pre>
+      </div>
+
+      <h3>Entidad JobEjecucion</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Campo</th><th>Tipo</th><th>Descripción</th></tr></thead>
+          <tbody>
+            <tr><td><code>tipo</code></td><td>String</td><td>"MANUAL" (disparado desde el panel) o "AUTOMATICO" (cron)</td></tr>
+            <tr><td><code>estado</code></td><td>String</td><td>"EJECUTANDO" → "COMPLETADO" o "ERROR"</td></tr>
+            <tr><td><code>pendientesEncontrados</code></td><td>Integer</td><td>Entradas sin respuesta_local detectadas al iniciar</td></tr>
+            <tr><td><code>procesados</code></td><td>Integer</td><td>Enviadas a Ollama con éxito. Se actualiza en tiempo real.</td></tr>
+            <tr><td><code>errores</code></td><td>Integer</td><td>Entradas que fallaron</td></tr>
+            <tr><td><code>detalle</code></td><td>TEXT</td><td>Mensaje resumen al finalizar</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3>Panel de administración</h3>
+      <p>El panel admin incluye dos vistas dedicadas:</p>
+      <ul style="margin: 12px 0 12px 24px; color: #444;">
+        <li><strong>/admin/dataset</strong> — Tabla comparativa proveedor cloud (con badge por proveedor) vs VeriAI: alertas por las 9 dimensiones (G/L), totales Σ7 y Σ9, scores IMI, divergencia. Filas expandibles con resúmenes. Botón "Retry ahora" para lanzar el job manualmente.</li>
+        <li><strong>/admin/jobs</strong> — Historial de todas las ejecuciones del scheduler. Auto-refresh cada 3 s mientras hay un job EJECUTANDO.</li>
+      </ul>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="aviso-email-scheduler">
+      <h2>AvisoEmailScheduler <span class="badge badge-green" style="font-size:11px;vertical-align:middle;">Nuevo</span></h2>
+      <p><code>backend/src/main/java/com/verinews/backend/scheduler/AvisoEmailScheduler.java</code> — <code>@Component</code> con <code>@Scheduled(cron = "0 0 8 * * *")</code> (diario, 08:00), mismo patrón que <a href="#veri-ai-scheduler">VeriAiRetryScheduler</a>. Avisos por email <strong>condicionales</strong>: solo se dispara si hay algo real que contar, nunca un digest fijo por calendario (se descartó deliberadamente el envío semanal por calendario).</p>
+
+      <h3>Dos comprobaciones diarias</h3>
+      <div class="flow">
+        <pre><code>
+  Cada día a las 08:00 (cron: 0 0 8 * * *)
+    → avisarRachaEnRiesgo()
+        → UsuarioRepository.findByRachaActualGreaterThanAndRachaUltimaFecha(0, hoy.minusDays(2))
+        → Por cada usuario con racha &gt; 0 que no analiza desde hace 2 días:
+            EmailService.enviarAvisoRachaEnRiesgo(destinatario, nombre, diasRacha)
+        → Se autolimita a un único envío por "hueco" de racha sin necesitar
+          campo anti-spam: en cuanto rachaUltimaFecha avanza (o la racha se
+          reinicia), la condición deja de cumplirse
+    → avisarCambioFuente()
+        → FuenteSeguidaService.listarPendientesAvisoImi()
+          (filtra por hayCambio == true Y ultimoAvisoImiEnviado == null)
+        → Por cada FuenteSeguida pendiente:
+            EmailService.enviarAvisoCambioFuente(destinatario, nombreMedio, mediaAnterior, mediaActual)
+            FuenteSeguidaService.marcarAvisoImiEnviado(id)
+        </code></pre>
+      </div>
+
+      <h3>Plantillas de email</h3>
+      <p>Reutiliza el método genérico <code>EmailService.enviarNotificacion(destinatario, asunto, html)</code> — ya existía en <a href="#email-service">EmailService</a> pero sin ningún caller previo. Dos plantillas HTML nuevas, <code>enviarAvisoRachaEnRiesgo()</code> y <code>enviarAvisoCambioFuente()</code>, construidas con un builder HTML compartido <code>buildAvisoHtml</code> que reutiliza el mismo estilo visual que el email de verificación de cuenta ya existente (<code>EmailService.buildVerificacionHtml</code>).</p>
+      <p>Sin opt-out de usuario por ahora — decisión explícita, se puede añadir un flag más adelante si hace falta.</p>
+
+      <div class="callout warn"><strong>Bloqueado en producción:</strong> igual que el resto de emails transaccionales (ver <a href="#entornos">Variables de entorno</a> y <a href="#email-service">EmailService</a>), el envío por Gmail SMTP no funciona de forma fiable en Render — la causa exacta no está confirmada al 100% (posible problema de TLS/SSL en la conexión SMTP saliente, o bloqueo de puerto por parte del cloud provider). En local funciona sin problema. Mientras tanto, estos avisos son efectivos solo en desarrollo.</div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="jwt-security">
+      <h2>Seguridad JWT</h2>
+      <p>Implementada en <code>JwtUtil.java</code> y <code>JwtFilter.java</code>. Sin sesiones de servidor — cada request es validado independientemente.</p>
+
+      <h3>Generación del token</h3>
+      <pre><code><span class="cm">// JwtUtil.java — HMAC-SHA256 con clave de al menos 32 chars</span>
+<span class="kw">public</span> String generateToken(String username) {
+    <span class="kw">return</span> Jwts.builder()
+        .subject(username)           <span class="cm">// email del usuario</span>
+        .issuedAt(<span class="kw">new</span> Date())
+        .expiration(<span class="kw">new</span> Date(System.currentTimeMillis() + expirationMs))
+        .signWith(secretKey)         <span class="cm">// HMAC-SHA256</span>
+        .compact();                  <span class="cm">// header.payload.signature</span>
+}</code></pre>
+
+      <h3>Validación en cada request (JwtFilter)</h3>
+      <pre><code><span class="cm">// JwtFilter.java — ejecutado antes de cada controller</span>
+String header = request.getHeader(<span class="str">"Authorization"</span>);
+<span class="kw">if</span> (header != <span class="kw">null</span> &amp;&amp; header.startsWith(<span class="str">"Bearer "</span>)) {
+    String token = header.substring(<span class="num">7</span>);
+    <span class="kw">if</span> (jwtUtil.isTokenValid(token)) {
+        String username = jwtUtil.extractUsername(token);
+        <span class="cm">// Cargar UserDetails y establecer en SecurityContext</span>
+        UsernamePasswordAuthenticationToken auth = ...;
+        SecurityContextHolder.getContext().setAuthentication(auth);
+    }
+}
+<span class="cm">// Si el token es inválido o ausente, la request continúa sin autenticar</span>
+<span class="cm">// Spring Security rechazará si la ruta requiere autenticación</span></code></pre>
+
+      <h3>Rutas y permisos (SecurityConfig)</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Ruta</th><th>Acceso</th></tr></thead>
+          <tbody>
+            <tr><td><code>/api/auth/**</code></td><td>Público (registro, login, verificar email)</td></tr>
+            <tr><td><code>/api/public/**</code></td><td>Público (explorar análisis publicados)</td></tr>
+            <tr><td><code>/api/i18n/**</code></td><td>Público (traducciones)</td></tr>
+            <tr><td><code>/swagger-ui/**</code>, <code>/v3/api-docs/**</code></td><td>Público (documentación)</td></tr>
+            <tr><td><code>/api/admin/**</code></td><td>Requiere rol <code>ADMIN</code></td></tr>
+            <tr><td>Resto</td><td>Requiere JWT válido (cualquier rol)</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="section" id="email-service">
+      <h2>EmailService</h2>
+      <p>Servicio Spring que envía emails HTML via Gmail SMTP usando <code>JavaMailSender</code>. La configuración SMTP se inyecta desde variables de entorno.</p>
+
+      <h3>Configuración SMTP</h3>
+      <pre><code><span class="cm"># application.properties</span>
+<span class="prop">spring.mail.host</span>=<span class="str">smtp.gmail.com</span>
+<span class="prop">spring.mail.port</span>=<span class="num">587</span>
+<span class="prop">spring.mail.username</span>=${<span class="val">MAIL_USERNAME</span>:}
+<span class="prop">spring.mail.password</span>=${<span class="val">MAIL_PASSWORD</span>:}  <span class="cm"># App Password de Gmail, no la contraseña normal</span>
+<span class="prop">spring.mail.properties.mail.smtp.starttls.enable</span>=<span class="str">true</span></code></pre>
+
+      <h3>Método de envío</h3>
+      <pre><code><span class="kw">private void</span> enviar(String to, String subject, String html) {
+    <span class="kw">if</span> (from == <span class="kw">null</span> || from.isBlank()) {
+        log.warn(<span class="str">"[EMAIL] MAIL_USERNAME no configurada — email omitido"</span>);
+        <span class="kw">return</span>;
+    }
+    MimeMessage message = mailSender.createMimeMessage();
+    MimeMessageHelper helper = <span class="kw">new</span> MimeMessageHelper(message, <span class="kw">true</span>, <span class="str">"UTF-8"</span>);
+    helper.setFrom(from);
+    helper.setTo(to);
+    helper.setSubject(subject);
+    helper.setText(html, <span class="kw">true</span>);  <span class="cm">// true = HTML</span>
+    mailSender.send(message);
+}</code></pre>
+
+      <h3>Emails enviados por el sistema</h3>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Evento</th><th>Método</th><th>Destinatario</th></tr></thead>
+          <tbody>
+            <tr><td>Registro</td><td><code>enviarVerificacion()</code></td><td>Usuario que se registra</td></tr>
+            <tr><td>Reenvío de verificación</td><td><code>enviarVerificacion()</code></td><td>Usuario autenticado sin verificar</td></tr>
+            <tr><td>Análisis publicado</td><td><code>enviarPublicado()</code></td><td>Propietario del análisis</td></tr>
+            <tr><td>Análisis rechazado</td><td><code>enviarRechazado()</code></td><td>Propietario del análisis</td></tr>
+            <tr><td>Racha en riesgo de romperse <span class="badge badge-green" style="font-size:10px;">Nuevo</span></td><td><code>enviarAvisoRachaEnRiesgo()</code></td><td>Usuario con racha activa sin analizar hace 2 días — disparado por <a href="#aviso-email-scheduler">AvisoEmailScheduler</a></td></tr>
+            <tr><td>Cambio de IMI en fuente seguida <span class="badge badge-green" style="font-size:10px;">Nuevo</span></td><td><code>enviarAvisoCambioFuente()</code></td><td>Usuario que sigue un dominio cuya media IMI se movió ≥10 pts — disparado por <a href="#aviso-email-scheduler">AvisoEmailScheduler</a></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="margin-top:-6px;">Las dos plantillas nuevas usan el método genérico <code>enviarNotificacion(destinatario, asunto, html)</code>, que ya existía sin ningún caller hasta ahora, y comparten builder HTML (<code>buildAvisoHtml</code>) con el mismo estilo visual que <code>buildVerificacionHtml</code>.</p>
+      <div class="callout warn"><strong>Silencio ante errores SMTP:</strong> Si el email falla, el sistema loguea el error pero no lanza excepción ni bloquea el flujo principal. El registro sigue completándose aunque el email no llegue. En producción (Render) el envío por Gmail SMTP no es fiable — ver la nota en <a href="#aviso-email-scheduler">AvisoEmailScheduler</a>.</div>
+    </div>
+
+  </div><!-- /content -->
+</main>
+</div><!-- /layout -->
+
+<script>
+  // Highlight active sidebar link on scroll
+  const links = document.querySelectorAll('.sidebar a');
+  const sections = document.querySelectorAll('[id]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const a = document.querySelector(`.sidebar a[href="#${e.target.id}"]`);
+        if (a) a.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-20% 0px -70% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>
