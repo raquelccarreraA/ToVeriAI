@@ -21,7 +21,7 @@ Autora: **Raquel Comesaña Carrera**, desarrolladora full stack.
 ## Qué hace
 
 - **Tres modos de entrada:** texto, URL (extrae el artículo y los datos del medio) e imagen (lee el texto de una captura).
-- **Índice IMI de 0 a 100**, calculado a partir de 7 dimensiones en modo texto y hasta 9 en modo URL.
+- **Índice IMI (Índice de Métricas Interpretativas) de 0 a 100**, calculado a partir de 7 dimensiones en modo texto y hasta 9 en modo URL.
 - **Explicación, no veredicto:** cada dimensión muestra sus alertas para que el lector entienda por qué sube o baja la nota.
 - **Usuarios registrados:** historial, perfil, estadísticas, rachas y exportación del análisis.
 - **Multilingüe:** castellano, gallego, catalán y euskera.
@@ -36,21 +36,22 @@ flowchart LR
     B --> O{{AiOrchestrator}}
     O -- round-robin + failover --> C["5 proveedores de IA en la nube<br/>Cerebras · Gemini · Mistral · SambaNova · Cloudflare"]
     B -- modo imagen --> V["Groq Vision<br/>extracción de texto"]
-    O -. opcional .-> L["VeriAI<br/>modelo local en Ollama"]
+    O -- en paralelo --> L["VeriAI<br/>Qwen 2.5 7B afinado (v2)<br/>Ollama"]
+    C -. dataset: nueva versión cada 6.000 análisis .-> L
     B --> M[Gmail SMTP]
 ```
 
 ## Decisiones técnicas destacadas
 
 - **Orquestador de IA con rotación y failover.** El análisis se reparte en round-robin entre cinco proveedores. Si uno falla o llega a su límite, pasa al siguiente, así que la app sigue funcionando aunque caiga un proveedor.
-- **Un modelo propio: VeriAI.** Cada análisis en la nube se guarda junto a la respuesta de un modelo local (Ollama), lo que forma un dataset de entrenamiento. Un panel de administración compara los dos y mide la divergencia, que es la base para afinar un modelo que funcione sin depender de APIs externas.
+- **Un modelo propio: VeriAI.** Los proveedores en la nube y el modelo local (Ollama) analizan cada noticia en paralelo. Los resultados de la nube forman un dataset de entrenamiento y, cada 6.000 análisis, se hace fine-tuning y sale una nueva versión de VeriAI. Va por la **versión 2, sobre Qwen 2.5 7B**, y en paralelo se entrena una variante sobre Qwen 3.5 7B. Un panel de administración compara cada versión con la nube y mide la divergencia, para que el modelo acabe funcionando sin depender de APIs externas.
 - **Caché por hash de contenido.** Antes de llamar a la IA se calcula el SHA-256 del contenido. Si ya se analizó, se devuelve el resultado guardado; si el medio editó el artículo, el hash cambia y se vuelve a analizar. El cupo diario del usuario solo se descuenta si hubo una llamada real a la IA.
 - **Cupos por tipo de usuario:** usuarios anónimos, registrados y premium, con bonus por racha de uso.
 - **Seguridad:** Spring Security con JWT, roles (USER, PREMIUM, ADMIN) y credenciales solo en variables de entorno.
 - **API documentada** con Springdoc OpenAPI (Swagger UI).
 - **Despliegue continuo:** cada push a `main` despliega el frontend en Vercel y el backend en Render.
 
-## Índice IMI
+## Índice IMI (Índice de Métricas Interpretativas)
 
 Las ponderaciones parten del marco NewsGuard y se completan con criterios de la IFCN y The Trust Project.
 
