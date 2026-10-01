@@ -324,7 +324,7 @@
           <tr><th>Servicio</th><th>Propósito</th><th>Notas</th></tr>
           <tr><td>Rotación cloud (5 APIs)</td><td>Análisis de credibilidad (IA)</td><td>Cerebras, Gemini, Mistral, SambaNova, Cloudflare — round-robin con failover. Cada una requiere su propia API key.</td></tr>
           <tr><td>Groq Vision</td><td>Extracción de texto en modo IMAGEN</td><td>Modelo <code>llama-4-scout</code>. No participa en la puntuación.</td></tr>
-          <tr><td>Ollama / VeriAI</td><td>IA local opcional (VPS dedicado)</td><td>Modelo <code>llama3.2</code> por defecto (<code>ollama.modelo</code>); <code>qwen2.5vl:7b</code> para Vision. Desactivado en prod (<code>AI_LOCAL_HABILITADO=false</code>) hasta que VeriAI madure.</td></tr>
+          <tr><td>Ollama / VeriAI</td><td>IA local opcional (VPS dedicado)</td><td>Modelos <code>qwen2.5:7b</code> (base de VeriAI, configurado en <code>OLLAMA_MODELO</code>) y <code>llama3.2</code> (valor por defecto de <code>ollama.modelo</code>); <code>qwen2.5vl:7b</code> para Vision. Desactivado en prod (<code>AI_LOCAL_HABILITADO=false</code>) hasta que VeriAI madure.</td></tr>
           <tr><td>Gmail SMTP</td><td>Emails transaccionales</td><td>App Password. Sin dominio propio.</td></tr>
           <tr><td>MySQL 8</td><td>Base de datos principal</td><td>Local en dev, externo en producción.</td></tr>
         </table>
