@@ -36,15 +36,15 @@ flowchart LR
     B --> O{{AiOrchestrator}}
     O -- round-robin + failover --> C["5 proveedores de IA en la nube<br/>Cerebras · Gemini · Mistral · SambaNova · Cloudflare"]
     B -- modo imagen --> V["Groq Vision<br/>extracción de texto"]
-    O -- en paralelo --> L["VeriAI<br/>Qwen 2.5 7B afinado (v2)<br/>Ollama"]
-    C -. dataset: nueva versión cada 6.000 análisis .-> L
+    B -- análisis guardados --> D[("Dataset de<br/>entrenamiento")]
+    D -. exportado a local .-> L["VeriAI (en local, fuera de producción)<br/>Qwen 2.5 7B afinado (v2)<br/>Ollama"]
     B --> M[Gmail SMTP]
 ```
 
 ## Decisiones técnicas destacadas
 
 - **Orquestador de IA con rotación y failover.** El análisis se reparte en round-robin entre cinco proveedores. Si uno falla o llega a su límite, pasa al siguiente, así que la app sigue funcionando aunque caiga un proveedor.
-- **Un modelo propio: VeriAI.** Los proveedores en la nube y el modelo local (Ollama) analizan cada noticia en paralelo. Los resultados de la nube forman un dataset de entrenamiento y, cada 6.000 análisis, se hace fine-tuning y sale una nueva versión de VeriAI. Va por la **versión 2, sobre Qwen 2.5 7B**, y en paralelo se entrena una variante sobre Qwen 3.5 7B. Un panel de administración compara cada versión con la nube y mide la divergencia, para que el modelo acabe funcionando sin depender de APIs externas.
+- **Un modelo propio: VeriAI.** En producción analizan los proveedores en la nube y cada resultado se guarda en un dataset de entrenamiento. Ese dataset se exporta y se carga en local, donde VeriAI (Ollama) analiza las mismas noticias para comparar sus resultados con los de la nube. Cada 6.000 análisis se hace fine-tuning y sale una nueva versión: va por la **versión 2, sobre Qwen 2.5 7B**, y en paralelo se entrena una variante sobre Qwen 3.5 7B. El modelo local pasará a producción cuando iguale o supere a las APIs.
 - **Caché por hash de contenido.** Antes de llamar a la IA se calcula el SHA-256 del contenido. Si ya se analizó, se devuelve el resultado guardado; si el medio editó el artículo, el hash cambia y se vuelve a analizar. El cupo diario del usuario solo se descuenta si hubo una llamada real a la IA.
 - **Cupos por tipo de usuario:** usuarios anónimos, registrados y premium, con bonus por racha de uso.
 - **Seguridad:** Spring Security con JWT, roles (USER, PREMIUM, ADMIN) y credenciales solo en variables de entorno.
