@@ -74,7 +74,7 @@ Cada dimensión recibe entre 0 y 5 alertas y la nota final penaliza según el pe
 | Backend | Java 17, Spring Boot 3.5, Spring Security + JWT (JJWT), Spring Data JPA / Hibernate, Spring Mail, JSoup, Lombok, Springdoc OpenAPI |
 | Frontend | React 19, Vite, React Router, Axios, Recharts, UnoCSS, i18n propio |
 | Datos | MySQL 8 |
-| IA | Cerebras, Gemini, Mistral, SambaNova y Cloudflare en rotación; Groq Vision; Ollama |
+| IA | Cerebras, Gemini, Mistral, SambaNova y Cloudflare en rotación; Groq Vision; Ollama con Qwen 2.5 7B, Qwen 3.5 7B y Llama 3.2 |
 | Infraestructura | Vercel, Render (Docker), Gmail SMTP |
 
 ## Contacto
