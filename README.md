@@ -1,132 +1,83 @@
 # toVeriAI
 
-Plataforma web de análisis de credibilidad de noticias mediante inteligencia artificial, desarrollada como Trabajo de Fin de Ciclo del Grado Superior en Desarrollo de Aplicaciones Web. El sistema evalúa cualquier texto informativo en siete dimensiones independientes y genera un índice de credibilidad IMI (Índice de Métricas Interpretativas) de 0 a 100. Permite el uso anónimo con límite diario y ofrece historial, perfil y estadísticas a los usuarios registrados.
+**Análisis de credibilidad de noticias con inteligencia artificial.**
+Pegas un texto, una URL o una imagen de una noticia y toVeriAI devuelve un índice de credibilidad de 0 a 100 desglosado por dimensiones, con las alertas que explican cada puntuación.
 
-Autora: Raquel Comesaña Carrera — fullstack developer.
+[![Web en producción](https://img.shields.io/badge/demo-toveriai.com-2D6A4F)](https://www.toveriai.com)
+![Java 17](https://img.shields.io/badge/Java-17-orange)
+![Spring Boot 3.5](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F)
+![React 19](https://img.shields.io/badge/React-19-61DAFB)
+![MySQL 8](https://img.shields.io/badge/MySQL-8-4479A1)
 
----
+![Página de inicio de toVeriAI](docs/toveriai-home.png)
 
-## Tecnologías utilizadas
+Trabajo de Fin de Ciclo del CFGS en Desarrollo de Aplicaciones Web (IES Fernando Wirtz Suárez) y proyecto personal, hoy en producción.
+Autora: **Raquel Comesaña Carrera**, desarrolladora full stack.
 
-**Backend**
-- Java 17 + Spring Boot 3.x
-- Spring Security con autenticación JWT
-- Spring Data JPA / Hibernate
-- MySQL 8
-- Lombok
-- Maven
-
-**Frontend**
-- React 18 + Vite
-- React Router v6
-- Axios
-- Recharts
-- i18n propio (ES, GL, CA, EU)
-
-**Inteligencia Artificial**
-- Rotacion de APIS para fine tunning.
-- AI Local VeriNewsAI entrenada por los diferentes provedores.
+> **Sobre este repositorio:** el código fuente es privado. Aquí están la descripción del proyecto, la arquitectura y la [documentación técnica completa](Documentacion/documentacion-tecnica.html). Si quieres ver el código, escríbeme y te lo enseño.
 
 ---
 
-## Requisitos previos
+## Qué hace
 
-- Java 17 o superior
-- Node.js 18 o superior
-- MySQL 8
-- Cuentas en los diferentes modelos y sus api keys.
+- **Tres modos de entrada:** texto, URL (extrae el artículo y los datos del medio) e imagen (lee el texto de una captura).
+- **Índice IMI de 0 a 100**, calculado a partir de 7 dimensiones en modo texto y hasta 9 en modo URL.
+- **Explicación, no veredicto:** cada dimensión muestra sus alertas para que el lector entienda por qué sube o baja la nota.
+- **Usuarios registrados:** historial, perfil, estadísticas, rachas y exportación del análisis.
+- **Multilingüe:** castellano, gallego, catalán y euskera.
 
----
+## Arquitectura
 
-## Configuración del entorno
-
-El proyecto requiere un fichero de propiedades local que **no está incluido en el repositorio**. Antes de arrancar el backend, crea el fichero:
-
-```
-backend/src/main/resources/application-dev.properties
-```
-
-Con el siguiente contenido (sustituye los valores):
-
-```properties
-spring.datasource.username=tu_usuario_mysql
-spring.datasource.password=tu_contraseña_mysql
-modelo.api.key=tu_api_key_de_modelo
-jwt.secret=una_clave_secreta_de_minimo_32_caracteres
+```mermaid
+flowchart LR
+    U[Usuario] --> F["Frontend<br/>React 19 + Vite<br/>(Vercel)"]
+    F -- REST + JWT --> B["Backend<br/>Spring Boot 3.5<br/>(Render, Docker)"]
+    B --> DB[(MySQL 8)]
+    B --> O{{AiOrchestrator}}
+    O -- round-robin + failover --> C["5 proveedores de IA en la nube<br/>Cerebras · Gemini · Mistral · SambaNova · Cloudflare"]
+    B -- modo imagen --> V["Groq Vision<br/>extracción de texto"]
+    O -. opcional .-> L["VeriAI<br/>modelo local en Ollama"]
+    B --> M[Gmail SMTP]
 ```
 
-> El fichero `application-dev.properties` está incluido en `.gitignore` y nunca debe commitearse. Contiene credenciales sensibles.
+## Decisiones técnicas destacadas
 
----
+- **Orquestador de IA con rotación y failover.** El análisis se reparte en round-robin entre cinco proveedores. Si uno falla o llega a su límite, pasa al siguiente, así que la app sigue funcionando aunque caiga un proveedor.
+- **Un modelo propio: VeriAI.** Cada análisis en la nube se guarda junto a la respuesta de un modelo local (Ollama), lo que forma un dataset de entrenamiento. Un panel de administración compara los dos y mide la divergencia, que es la base para afinar un modelo que funcione sin depender de APIs externas.
+- **Caché por hash de contenido.** Antes de llamar a la IA se calcula el SHA-256 del contenido. Si ya se analizó, se devuelve el resultado guardado; si el medio editó el artículo, el hash cambia y se vuelve a analizar. El cupo diario del usuario solo se descuenta si hubo una llamada real a la IA.
+- **Cupos por tipo de usuario:** usuarios anónimos, registrados y premium, con bonus por racha de uso.
+- **Seguridad:** Spring Security con JWT, roles (USER, PREMIUM, ADMIN) y credenciales solo en variables de entorno.
+- **API documentada** con Springdoc OpenAPI (Swagger UI).
+- **Despliegue continuo:** cada push a `main` despliega el frontend en Vercel y el backend en Render.
 
-## Instalación y arranque
+## Índice IMI
 
-### Backend
+Las ponderaciones parten del marco NewsGuard y se completan con criterios de la IFCN y The Trust Project.
 
-```bash
-cd backend
-mvn spring-boot:run
-```
+| Dimensión            | Peso |
+|----------------------|------|
+| Verificación factual | 26 % |
+| Consistencia interna | 24 % |
+| Fuentes              | 15 % |
+| Sesgo                | 12 % |
+| Tono general         | 12 % |
+| Semántica            | 6 %  |
+| Cifras               | 5 %  |
 
-El servidor arranca en `http://localhost:9000`.
+Cada dimensión recibe entre 0 y 5 alertas y la nota final penaliza según el peso de cada una. En modo URL se añaden **Transparencia del medio** y **Autoría**.
 
-### Frontend
+## Stack
 
-```bash
-cd frontend
-npm install
-npm run dev
-```
+| Capa | Tecnologías |
+|------|-------------|
+| Backend | Java 17, Spring Boot 3.5, Spring Security + JWT (JJWT), Spring Data JPA / Hibernate, Spring Mail, JSoup, Lombok, Springdoc OpenAPI |
+| Frontend | React 19, Vite, React Router, Axios, Recharts, UnoCSS, i18n propio |
+| Datos | MySQL 8 |
+| IA | Cerebras, Gemini, Mistral, SambaNova y Cloudflare en rotación; Groq Vision; Ollama |
+| Infraestructura | Vercel, Render (Docker), Gmail SMTP |
 
-La aplicación arranca en `http://localhost:5173`.
+## Contacto
 
----
-
-## Estructura del proyecto
-
-```
-VeriNews_AI/
-├── backend/
-│   └── src/main/java/com/verinews/backend/
-│       ├── conf/           # Configuración de seguridad (Spring Security, CORS)
-│       ├── config/         # Beans auxiliares (Messages, DataInitializer)
-│       ├── controller/     # Endpoints REST
-│       ├── dto/            # Objetos de transferencia de datos
-│       ├── models/         # Entidades JPA y enums
-│       ├── repositories/   # Interfaces Spring Data JPA
-│       ├── security/       # JWT (JwtUtil, JwtFilter, UserDetailsServiceImpl)
-│       └── service/        # Lógica de negocio
-│
-└── frontend/
-    └── src/
-        ├── components/     # Componentes reutilizables (Navbar, Footer, rutas protegidas)
-        ├── context/        # AuthContext, TranslationContext
-        ├── i18n/           # Ficheros de traducción JSON (es, gl, ca, eu)
-        ├── pages/          # Vistas principales
-        ├── services/       # Cliente Axios
-        └── utils/          # Utilidades (colores IMI, etc.)
-```
-
----
-
-## Dimensiones del índice IMI
-
-El índice IMI se calcula ponderando siete métricas basadas en el marco NewsGuard, complementado con criterios IFCN y The Trust Project:
-
-| Dimensión             | Peso |
-|-----------------------|------|
-| Verificación Factual  | 26 % |
-| Consistencia Interna  | 24 % |
-| Fuentes               | 15 % |
-| Sesgo                 | 12 % |
-| Tono General          | 12 % |
-| Semántica             | 6 %  |
-| Cifras                | 5 %  |
-
-Cada dimensión recibe entre 0 y 5 alertas. La puntuación final (0–100) penaliza proporcionalmente según el peso de cada métrica. Una puntuación alta en Verificación Factual actúa como techo global del índice.
-
----
-
-## Seguridad
-
-El fichero `application-dev.properties` contiene credenciales de base de datos y claves de API. Está listado en `.gitignore` y no debe incluirse en ningún commit ni repositorio público.
+- Portfolio: <https://raquelccarreraa.github.io/Portfolio-raquelcarerra/>
+- LinkedIn: [Raquel Comesaña Carrera](https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195)
+- Email: raquel.ccarrera@gmail.com
