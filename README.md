@@ -71,4 +71,4 @@ El código es privado, pero te lo enseño encantada en una entrevista. Si quiere
 
 Soy **Raquel Comesaña Carrera**, desarrolladora full stack (Java · Spring Boot · React) en A Coruña, especializándome en IA y Big Data. **Busco trabajo como desarrolladora, con disponibilidad inmediata.**
 
-[Portfolio](https://raquelccarreraa.github.io/Porfolio-raquelcarerra/) · [LinkedIn](https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195) · raquel.ccarrera@gmail.com
+[Portfolio](https://raquelccarreraa.github.io/Porfolio-raquelcarrera/) · [LinkedIn](https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195) · raquel.ccarrera@gmail.com
