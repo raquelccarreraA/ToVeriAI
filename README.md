@@ -18,7 +18,7 @@
 
 Pegas un texto, una URL o una captura de una noticia y, en menos de 30 segundos, toVeriAI devuelve un **índice de credibilidad de 0 a 100** con la explicación de cada nota y citas literales del artículo. Sin cajas negras.
 
-Es mi proyecto: la creé desde cero como Trabajo de Fin de Ciclo y la he seguido evolucionando tras la entrega hasta convertirla en un producto **en producción**.
+Es mi proyecto: la creé desde cero y la sigo evolucionando como un producto **en producción**.
 
 | 9 | 3 | 5 | 5 | v2 |
 |:---:|:---:|:---:|:---:|:---:|
