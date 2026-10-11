@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>toVeriAI — La plataforma de verificación de credibilidad periodística</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1A1A1A;
+    --green: #2D6A4F;
+    --green-mid: #3d8c66;
+    --green-light: #b8d9cb;
+    --green-pale: rgba(45,106,79,0.07);
+    --bg: #F7F5F2;
+    --card: #FDFCFB;
+    --border: #E8E4DF;
+    --muted: #888;
+    --amber: #b47820;
+    --red: #c0392b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+  a { color: inherit; text-decoration: none; }
+
+  /* ── HERO COVER ─────────────────────────── */
+  .cover {
+    min-height: 100vh;
+    background: linear-gradient(160deg, #0f1f18 0%, #1A1A1A 50%, #1e3328 100%);
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 80px 10vw;
+    position: relative; overflow: hidden;
+  }
+  .cover::before {
+    content: '';
+    position: absolute; top: -30%; right: -10%; width: 700px; height: 700px;
+    background: radial-gradient(circle, rgba(45,106,79,0.18) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .cover-eyebrow {
+    font-size: 11px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--green-light); margin-bottom: 28px;
+    display: flex; align-items: center; gap: 14px;
+  }
+  .cover-eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--green-light); }
+  .cover h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(52px, 8vw, 96px); font-weight: 300; line-height: 1.0;
+    color: #fff; margin-bottom: 28px;
+  }
+  .cover h1 em { font-style: italic; color: var(--green-light); }
+  .cover .tagline {
+    font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: rgba(255,255,255,0.55);
+    max-width: 600px; line-height: 1.7; margin-bottom: 48px;
+  }
+  .cover-stats {
+    display: flex; gap: 48px; flex-wrap: wrap;
+  }
+  .cover-stat .num {
+    font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300;
+    color: var(--green-light); line-height: 1;
+  }
+  .cover-stat .label { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; margin-top: 4px; }
+  .cover-scroll { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.2); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
+  .cover-scroll::after { content: '↓'; display: block; font-size: 20px; margin-top: 6px; }
+
+  /* ── SECTION BASE ───────────────────────── */
+  .section { padding: 96px 10vw; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--green); margin-bottom: 14px; display: flex; align-items: center; gap: 12px; }
+  .section-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--green); }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(36px, 5vw, 56px); font-weight: 300; line-height: 1.05; margin-bottom: 24px; }
+  h2 em { font-style: italic; color: var(--green); }
+  h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 12px; }
+  p { color: #555; font-size: 15px; line-height: 1.8; margin-bottom: 14px; max-width: 680px; }
+  p.wide { max-width: none; }
+  .divider { height: 1px; background: var(--border); }
+
+  /* ── PROBLEM SECTION ────────────────────── */
+  .problem { background: var(--dark); color: #fff; }
+  .problem .section-eyebrow { color: var(--green-light); }
+  .problem .section-eyebrow::before { background: var(--green-light); }
+  .problem h2 { color: #fff; }
+  .problem h2 em { color: var(--green-light); }
+  .problem p { color: rgba(255,255,255,0.55); max-width: none; }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.06); margin-top: 56px; }
+  .problem-item { padding: 36px; background: var(--dark); }
+  .problem-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.06); line-height: 1; margin-bottom: 16px; }
+  .problem-title { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 10px; }
+  .problem-desc { font-size: 13.5px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+
+  /* ── SOLUTION SECTION ───────────────────── */
+  .solution-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+  .solution-visual {
+    background: linear-gradient(135deg, var(--dark) 0%, #1e3328 100%);
+    padding: 48px; display: flex; flex-direction: column; gap: 16px;
+  }
+  .score-display { text-align: center; padding: 24px 32px 8px; }
+  .score-num { font-family: 'Cormorant Garamond', serif; font-size: 96px; font-weight: 300; line-height: 1; color: #27ae60; }
+  .score-verdict { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--green-light); margin-top: 10px; font-weight: 500; }
+  .score-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 6px; }
+  /* Escala de credibilidad: 3 tramos etiquetados + marcador con el valor del ejemplo */
+  .score-scale { position: relative; padding-top: 46px; }
+  .score-pointer { position: absolute; top: 0; transform: translateX(-50%); text-align: center; }
+  .score-flag { position: relative; display: inline-block; background: #fff; color: var(--dark); font-size: 11px; font-weight: 600; letter-spacing: 0.04em; padding: 4px 10px; border-radius: 2px; white-space: nowrap; }
+  .score-flag::after { content: ''; position: absolute; left: 50%; bottom: -5px; transform: translateX(-50%); border: 5px solid transparent; border-top-color: #fff; border-bottom: none; }
+  .score-pointer-line { width: 2px; height: 16px; background: #fff; margin: 7px auto 0; }
+  .score-segments { display: flex; gap: 2px; height: 10px; border-radius: 5px; overflow: hidden; }
+  .score-segments .seg { height: 100%; }
+  .score-legend { display: flex; margin-top: 10px; }
+  .score-legend span { font-size: 10.5px; color: rgba(255,255,255,0.55); letter-spacing: 0.03em; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .score-legend i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ── DIMENSIONS ─────────────────────────── */
+  .dims-section { background: var(--green-pale); }
+  .dims-group-title { margin-top: 56px; font-size: 12px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: var(--dark); display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .dims-group-note { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; color: var(--green); text-transform: none; }
+  .dims-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-top: 18px; }
+  .dims-grid.two { grid-template-columns: 1fr 1fr; }
+  .dim-card { background: var(--card); padding: 28px; border: 1px solid var(--border); }
+  .dim-card.dim-url { border-left: 3px solid var(--green); }
+  .dim-icon { font-size: 28px; margin-bottom: 14px; }
+  .dim-name { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; font-weight: 500; }
+  .dim-badge { display: inline-block; font-size: 9.5px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: #fff; background: var(--green); padding: 2px 8px; border-radius: 2px; margin-left: 8px; vertical-align: middle; }
+  .dim-title { font-size: 17px; font-weight: 500; margin-bottom: 10px; }
+  .dim-desc { font-size: 13px; color: var(--muted); line-height: 1.6; }
+  .dim-weight { display: inline-block; margin-top: 12px; font-size: 11px; color: var(--green); background: var(--green-pale); padding: 3px 10px; border-radius: 2px; }
+  .dims-footnote { font-size: 12.5px; color: var(--muted); margin-top: 18px; max-width: none; }
+
+  /* ── FEATURES ───────────────────────────── */
+  .features-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-top: 48px; }
+  .feature { display: flex; gap: 20px; }
+  .feature-icon { width: 44px; height: 44px; background: var(--green-pale); display: flex; align-items: center; justify-content: center; font-size: 20px; flex-shrink: 0; border: 1px solid rgba(45,106,79,0.15); }
+  .feature-body .feature-title { font-size: 15px; font-weight: 500; margin-bottom: 6px; }
+  .feature-body .feature-desc { font-size: 13.5px; color: var(--muted); line-height: 1.6; }
+
+  /* ── ENGAGEMENT / COMMUNITY ─────────────── */
+  .engage-section { background: var(--green-pale); }
+  .engage-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 48px; }
+  .engage-card { background: var(--card); border: 1px solid var(--border); border-top: 3px solid var(--green); padding: 32px; }
+  .engage-icon { font-size: 30px; margin-bottom: 14px; }
+  .engage-tag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; font-weight: 500; }
+  .engage-title { font-size: 19px; font-weight: 500; margin-bottom: 10px; }
+  .engage-desc { font-size: 13.5px; color: #555; line-height: 1.7; }
+  .honest-note { margin-top: 40px; background: var(--dark); color: #fff; padding: 36px 40px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .honest-note .hn-icon { font-size: 32px; flex-shrink: 0; }
+  .honest-note .hn-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 8px; }
+  .honest-note .hn-desc { font-size: 13.5px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 760px; margin-bottom: 0; }
+
+  /* ── AUDIENCE ───────────────────────────── */
+  .audience-section { background: #F0EDE8; }
+  .audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-top: 48px; }
+  .audience-card { background: var(--card); border: 1px solid var(--border); padding: 32px; }
+  .audience-role { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 12px; }
+  .audience-title { font-size: 20px; font-weight: 500; margin-bottom: 12px; }
+  .audience-list { list-style: none; }
+  .audience-list li { font-size: 13.5px; color: #555; padding: 5px 0; border-bottom: 1px solid var(--border); display: flex; gap: 10px; }
+  .audience-list li:last-child { border-bottom: none; }
+  .audience-list li::before { content: '→'; color: var(--green); flex-shrink: 0; }
+
+  /* ── TECH CREDIBILITY ───────────────────── */
+  .tech-section { background: var(--dark); color: #fff; }
+  .tech-section .section-eyebrow { color: var(--green-light); }
+  .tech-section .section-eyebrow::before { background: var(--green-light); }
+  .tech-section h2 { color: #fff; }
+  .tech-section p { color: rgba(255,255,255,0.5); }
+  .tech-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); margin-top: 48px; }
+  .tech-pillar { padding: 32px; }
+  .pillar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-light); margin-bottom: 10px; }
+  .pillar-title { font-size: 17px; color: #fff; font-weight: 400; margin-bottom: 10px; }
+  .pillar-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+  .tech-stack-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
+  .tech-chip { padding: 6px 14px; border: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; }
+
+  /* ── COMPETITIVE ────────────────────────── */
+  .comp-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 13.5px; }
+  .comp-table th { background: var(--dark); color: #fff; padding: 12px 20px; text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+  .comp-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); color: #444; }
+  .comp-table tr:last-child td { border-bottom: none; }
+  .comp-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }
+  .comp-table td:first-child { font-weight: 500; color: var(--dark); }
+  .comp-yes { color: var(--green); font-weight: 500; }
+  .comp-partial { color: var(--amber); }
+  .comp-no { color: #ccc; }
+  .comp-ours { background: rgba(45,106,79,0.04) !important; }
+
+  /* ── CTA ────────────────────────────────── */
+  .cta-section { background: linear-gradient(135deg, var(--green) 0%, #1e3d2a 100%); padding: 96px 10vw; color: #fff; text-align: center; }
+  .cta-section h2 { color: #fff; font-size: clamp(32px, 5vw, 52px); margin-bottom: 16px; }
+  .cta-section p { color: rgba(255,255,255,0.6); max-width: 520px; margin: 0 auto 40px; }
+  .cta-urls { display: flex; gap: 24px; justify-content: center; flex-wrap: wrap; }
+  .cta-url { padding: 14px 32px; border: 1.5px solid rgba(255,255,255,0.3); color: #fff; font-size: 13.5px; letter-spacing: 0.05em; transition: all 0.2s; }
+  .cta-url.primary { background: #fff; color: var(--green); border-color: #fff; font-weight: 500; }
+  .cta-url:hover { background: rgba(255,255,255,0.1); }
+  .cta-url.primary:hover { background: rgba(255,255,255,0.9); }
+
+  @media (max-width: 768px) {
+    .problem-grid, .solution-intro, .features-grid, .audience-grid, .tech-pillars, .dims-grid.two, .engage-grid { grid-template-columns: 1fr; }
+    .cover-stats { gap: 28px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── COVER ──────────────────────────────────────── -->
+<div class="cover">
+  <div class="cover-eyebrow">Presentación de producto · 2026</div>
+  <h1>toVeri<em>AI</em></h1>
+  <p class="tagline">La plataforma de inteligencia artificial que mide la credibilidad periodística con criterios científicos, transparentes y auditables.</p>
+  <div class="cover-stats">
+    <div class="cover-stat">
+      <div class="num">9</div>
+      <div class="label">Dimensiones de análisis IMI</div>
+    </div>
+    <div class="cover-stat">
+      <div class="num">3</div>
+      <div class="label">Modos: texto · URL · imagen</div>
+    </div>
+    <div class="cover-stat">
+      <div class="num">5</div>
+      <div class="label">Idiomas de interfaz</div>
+    </div>
+    <div class="cover-stat">
+      <div class="num">&lt;30s</div>
+      <div class="label">Tiempo medio de análisis</div>
+    </div>
+  </div>
+  <div class="cover-scroll">Descubre más</div>
+</div>
+
+<!-- ── PROBLEM ────────────────────────────────────── -->
+<div class="section problem">
+  <div class="section-eyebrow">El problema</div>
+  <h2>Vivimos en una <em>infodemia</em></h2>
+  <p>La desinformación se propaga más rápido que nunca. Los usuarios consumen noticias sin herramientas para evaluar su calidad periodística. El resultado: decisiones desinformadas, erosión de la confianza y polarización social.</p>
+  <div class="problem-grid">
+    <div class="problem-item">
+      <div class="problem-num">01</div>
+      <div class="problem-title">Ausencia de transparencia</div>
+      <div class="problem-desc">Los medios digitales no siempre revelan sus fuentes, metodologías o conflictos de interés. El lector no tiene criterios para evaluar su fiabilidad.</div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">02</div>
+      <div class="problem-title">Bulos y noticias manipuladas</div>
+      <div class="problem-desc">Los fact-checkers manuales no escalan. Necesitan horas para verificar una noticia. La desinformación llega antes que la corrección.</div>
+    </div>
+    <div class="problem-item">
+      <div class="problem-num">03</div>
+      <div class="problem-title">Opacidad algorítmica</div>
+      <div class="problem-desc">Las herramientas de IA existentes son cajas negras: dan una puntuación sin explicar por qué. El usuario no puede confiar en lo que no entiende.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── SOLUTION ───────────────────────────────────── -->
+<div class="section">
+  <div class="solution-intro">
+    <div>
+      <div class="section-eyebrow">La solución</div>
+      <h2>Análisis <em>explicable</em> en segundos</h2>
+      <p>toVeriAI combina modelos de lenguaje de última generación con la metodología de NewsGuard, IFCN y The Trust Project para producir análisis de credibilidad detallados, transparentes y auditables — en 10 a 30 segundos.</p>
+      <p>No solo una puntuación. Cada dimensión incluye una observación de 10-15 frases con citas textuales del artículo, fragmentos problemáticos identificados y una explicación del razonamiento detrás del score.</p>
+      <p>Tres vías de entrada: <strong>texto pegado</strong>, <strong>URL directa</strong> — con extracción automática del artículo mediante Jsoup — e <strong>imagen o captura</strong> de la noticia.</p>
+    </div>
+    <div class="solution-visual">
+      <div class="score-display">
+        <div class="score-num">82</div>
+        <div class="score-verdict">Alta credibilidad</div>
+        <div class="score-label">Índice de Métricas Interpretativas (IMI)</div>
+      </div>
+      <div class="score-scale">
+        <div class="score-pointer" style="left:82%">
+          <div class="score-flag">Este artículo: 82</div>
+          <div class="score-pointer-line"></div>
+        </div>
+        <div class="score-segments">
+          <div class="seg" style="width:50%;background:#e74c3c"></div>
+          <div class="seg" style="width:25%;background:#c9761f"></div>
+          <div class="seg" style="width:25%;background:#27ae60"></div>
+        </div>
+        <div class="score-legend">
+          <span style="width:50%"><i style="background:#e74c3c"></i>0–49 · Baja</span>
+          <span style="width:25%"><i style="background:#c9761f"></i>50–74 · Moderada</span>
+          <span style="width:25%"><i style="background:#27ae60"></i>75–100 · Alta</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── DIMENSIONS ─────────────────────────────────── -->
+<div class="section dims-section">
+  <div class="section-eyebrow">Metodología IMI</div>
+  <h2>Nueve dimensiones de <em>credibilidad</em></h2>
+  <p class="wide">Basado en los estándares de NewsGuard, IFCN y The Trust Project, el Índice de Métricas Interpretativas (IMI) evalúa cada artículo en <strong>7 dimensiones de contenido</strong> — presentes en todos los modos de análisis — a las que el análisis por URL añade <strong>2 dimensiones de transparencia del medio</strong>, posibles solo cuando el sistema puede rastrear las páginas del propio sitio.</p>
+  <div class="dims-group-title">Dimensiones de contenido <span class="dims-group-note">En todos los modos: texto · URL · imagen</span></div>
+  <div class="dims-grid">
+    <div class="dim-card">
+      <div class="dim-icon">🔍</div>
+      <div class="dim-name">Verificación Factual</div>
+      <div class="dim-title">Chequeo de hechos</div>
+      <div class="dim-desc">Contrasta las afirmaciones del texto con hechos verificables, conocimiento científico establecido y fuentes institucionales. Si detecta alertas graves, impone un techo duro al score global: un artículo con errores factuales serios no puede puntuar alto.</div>
+      <div class="dim-weight">Peso: 26% — dimensión principal</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">🔗</div>
+      <div class="dim-name">Consistencia</div>
+      <div class="dim-title">Coherencia interna</div>
+      <div class="dim-desc">Detecta contradicciones entre distintas partes del artículo, saltos lógicos y afirmaciones incompatibles entre sí.</div>
+      <div class="dim-weight">Peso: 24%</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">📚</div>
+      <div class="dim-name">Fuentes</div>
+      <div class="dim-title">Calidad y diversidad</div>
+      <div class="dim-desc">Evalúa si las fuentes citadas están identificadas, son verificables, tienen autoridad en el tema y son suficientemente diversas.</div>
+      <div class="dim-weight">Peso: 15%</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">⚖️</div>
+      <div class="dim-name">Sesgo</div>
+      <div class="dim-title">Detección de sesgos</div>
+      <div class="dim-desc">Identifica sesgos editoriales, ideológicos o de confirmación que puedan afectar la objetividad del texto.</div>
+      <div class="dim-weight">Peso: 12%</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">🎭</div>
+      <div class="dim-name">Tono</div>
+      <div class="dim-title">Análisis de tono</div>
+      <div class="dim-desc">Mide el grado de neutralidad vs. alarmismo, sensacionalismo o lenguaje emocional con intención manipuladora.</div>
+      <div class="dim-weight">Peso: 12%</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">💬</div>
+      <div class="dim-name">Semántica</div>
+      <div class="dim-title">Coherencia del lenguaje</div>
+      <div class="dim-desc">Analiza la coherencia semántica, claridad del lenguaje, términos cargados y framing narrativo del artículo.</div>
+      <div class="dim-weight">Peso: 6%</div>
+    </div>
+    <div class="dim-card">
+      <div class="dim-icon">📊</div>
+      <div class="dim-name">Cifras</div>
+      <div class="dim-title">Datos numéricos</div>
+      <div class="dim-desc">Verifica la exactitud y contextualización de estadísticas, porcentajes y datos numéricos presentados en el texto.</div>
+      <div class="dim-weight">Peso: 5%</div>
+    </div>
+  </div>
+  <div class="dims-group-title">Dimensiones de medio <span class="dims-group-note">Exclusivas del análisis por URL</span></div>
+  <div class="dims-grid two">
+    <div class="dim-card dim-url">
+      <div class="dim-icon">🏛️</div>
+      <div class="dim-name">Transparencia del Medio <span class="dim-badge">Solo URL</span></div>
+      <div class="dim-title">Propiedad y financiación</div>
+      <div class="dim-desc">Evalúa si el medio identifica claramente quién lo posee y cómo se financia, rastreando sus páginas «Sobre nosotros» y «Aviso legal» — algo imposible con solo el texto del artículo. Criterios NewsGuard 7 y 8.</div>
+      <div class="dim-weight">Requiere acceso al sitio del medio</div>
+    </div>
+    <div class="dim-card dim-url">
+      <div class="dim-icon">✍️</div>
+      <div class="dim-name">Autoría <span class="dim-badge">Solo URL</span></div>
+      <div class="dim-title">Firma y credenciales</div>
+      <div class="dim-desc">Evalúa si el artículo identifica a su autor con nombre y credenciales, penalizando seudónimos, firmas genéricas de «Redacción» o la ausencia total de autor. Criterio NewsGuard 9.</div>
+      <div class="dim-weight">Requiere acceso al sitio del medio</div>
+    </div>
+  </div>
+  <p class="dims-footnote">Los pesos indicados corresponden al análisis de texto e imagen (7 dimensiones = 100%). En el análisis por URL, los pesos de las 7 dimensiones de contenido se reescalan proporcionalmente para integrar las 2 dimensiones de medio — las 9 siguen sumando el 100% del IMI.</p>
+</div>
+
+<!-- ── FEATURES ───────────────────────────────────── -->
+<div class="section">
+  <div class="section-eyebrow">Características</div>
+  <h2>Diseñado para <em>confiar</em></h2>
+  <div class="features-grid">
+    <div class="feature">
+      <div class="feature-icon">🌐</div>
+      <div class="feature-body">
+        <div class="feature-title">Análisis por texto, URL o imagen</div>
+        <div class="feature-desc">Pega el texto, una URL — toVeriAI extrae el artículo automáticamente — o sube una captura de la noticia. Los tres modos producen análisis igual de detallados; el modo URL añade además las dos dimensiones de transparencia del medio.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🔎</div>
+      <div class="feature-body">
+        <div class="feature-title">Evidencia textual citada</div>
+        <div class="feature-desc">Cada observación incluye fragmentos literales del artículo en «comillas angulares». El análisis es verificable: el usuario puede buscar la cita en el texto original.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🌍</div>
+      <div class="feature-body">
+        <div class="feature-title">Multilingüe nativo</div>
+        <div class="feature-desc">Analiza artículos en cualquier idioma. La interfaz está disponible en 5 idiomas (español, gallego, catalán, euskera e inglés). El modelo detecta el idioma del artículo automáticamente.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🗄️</div>
+      <div class="feature-body">
+        <div class="feature-title">Caché inteligente</div>
+        <div class="feature-desc">El mismo artículo analizado en las últimas 24h devuelve el resultado cacheado instantáneamente, sin consumir tokens de API ni tiempo de procesamiento.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">👥</div>
+      <div class="feature-body">
+        <div class="feature-title">Plataforma colaborativa</div>
+        <div class="feature-desc">Los usuarios pueden compartir sus análisis para revisión editorial. Los análisis aprobados se publican en un explorador público, creando un repositorio de credibilidad.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📈</div>
+      <div class="feature-body">
+        <div class="feature-title">Historial y seguimiento</div>
+        <div class="feature-desc">Cada usuario registrado tiene un historial completo de sus análisis. Panel de administración con estadísticas, gestión de usuarios y revisión de contenido.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🛡️</div>
+      <div class="feature-body">
+        <div class="feature-title">Seguridad JWT stateless</div>
+        <div class="feature-desc">Autenticación sin sesiones de servidor. Tokens HMAC-SHA256 con expiración de 2h. Doble verificación de email en el registro.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🤖</div>
+      <div class="feature-body">
+        <div class="feature-title">VeriAI — Modelo propio en desarrollo</div>
+        <div class="feature-desc">Cada análisis alimenta un dataset de entrenamiento. toVeriAI está construyendo VeriAI, un modelo fine-tuneado específicamente para credibilidad periodística — y lo cuenta en abierto en su página pública Veri-AI.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">📄</div>
+      <div class="feature-body">
+        <div class="feature-title">Informe PDF profesional (Premium)</div>
+        <div class="feature-desc">Exporta cualquier análisis como informe en PDF listo para citar o archivar: score IMI, detalle por dimensión, recomendaciones de mejora generadas por IA, contexto adicional y transparencia del medio. Pensado para periodistas, docentes e investigadores.</div>
+      </div>
+    </div>
+    <div class="feature">
+      <div class="feature-icon">🪪</div>
+      <div class="feature-body">
+        <div class="feature-title">Tarjeta y sello compartibles</div>
+        <div class="feature-desc">Cada resultado se convierte en una tarjeta visual y un sello de verificación descargables, listos para compartir en redes. La verificación deja de quedarse en tu pantalla: viaja con la noticia.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- ── COMMUNITY & HABIT ──────────────────────────── -->
+<div class="section engage-section">
+  <div class="section-eyebrow">Comunidad y hábito</div>
+  <h2>Verificar no es un acto puntual. <em>Es un hábito.</em></h2>
+  <p class="wide">Las herramientas de verificación tradicionales se usan una vez y se olvidan. toVeriAI está diseñado para que verificar se convierta en rutina diaria — y para que la comunidad forme parte del resultado, no solo lo consuma.</p>
+  <div class="engage-grid">
+    <div class="engage-card">
+      <div class="engage-icon">🔥</div>
+      <div class="engage-tag">Gamificación</div>
+      <div class="engage-title">Racha de verificación con recompensa</div>
+      <div class="engage-desc">Analiza noticias varios días seguidos y tu racha crece — una llama con tu número de días, visible en tu perfil. Y cada 3 días de racha, ese día ganas un análisis extra gratis. Verificar deja de ser una tarea y se convierte en un hábito que se premia. Ningún fact-checker tradicional ofrece esto.</div>
+    </div>
+    <div class="engage-card">
+      <div class="engage-icon">🗳️</div>
+      <div class="engage-tag">Comunidad</div>
+      <div class="engage-title">¿Coincides con la IA?</div>
+      <div class="engage-desc">En el explorador público, los usuarios votan si están de acuerdo con el veredicto de la IA en cada dimensión — y el % de coincidencia se muestra junto al análisis. La IA propone, la comunidad contrasta. Transparencia y participación real frente a las cajas negras puramente algorítmicas.</div>
+    </div>
+    <div class="engage-card">
+      <div class="engage-icon">📡</div>
+      <div class="engage-tag">Observatorio de medios</div>
+      <div class="engage-title">Ranking público de fuentes + vigilancia</div>
+      <div class="engage-desc">Un ranking abierto de fiabilidad media por medio de comunicación, con su tendencia mensual. Y si un medio te importa, síguelo: toVeriAI te avisa si su fiabilidad cambia de forma notable. No una consulta puntual — un observatorio activo y continuo de la salud de los medios.</div>
+    </div>
+    <div class="engage-card">
+      <div class="engage-icon">🧠</div>
+      <div class="engage-tag">Transparencia radical</div>
+      <div class="engage-title">Veri-AI, un modelo explicado en abierto</div>
+      <div class="engage-desc">La página pública Veri-AI cuenta abiertamente cómo funciona el modelo de IA propio de toVeriAI, su historial de versiones y qué persigue. Mientras otras herramientas esconden su algoritmo, toVeriAI lo documenta a la vista de todos — porque un verificador solo merece confianza si él mismo es verificable.</div>
+    </div>
+  </div>
+  <div class="honest-note">
+    <div class="hn-icon">🤝</div>
+    <div>
+      <div class="hn-title">Honestidad desde la beta</div>
+      <div class="hn-desc">toVeriAI comunica abiertamente que está en fase beta, con acceso sujeto a revisión, y distingue con claridad qué puede hacer hoy y qué podría hacer con más apoyo — sin sobre-prometer. La misma filosofía aplica a sus avisos por email: nada de newsletters de relleno. Solo te escribimos cuando hay algo real que contar — tu racha en riesgo o un cambio de fiabilidad en un medio que sigues. Una IA verificadora que empieza siendo honesta sobre sus propias limitaciones.</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── AUDIENCE ───────────────────────────────────── -->
+<div class="section audience-section">
+  <div class="section-eyebrow">Audiencia</div>
+  <h2>¿Para quién es <em>toVeriAI</em>?</h2>
+  <div class="audience-grid">
+    <div class="audience-card">
+      <div class="audience-role">Ciudadanía</div>
+      <div class="audience-title">El lector informado</div>
+      <ul class="audience-list">
+        <li>Verifica artículos antes de compartirlos</li>
+        <li>Compara la calidad de distintos medios</li>
+        <li>Identifica bulos y desinformación</li>
+        <li>Cuenta gratuita con hasta 6 análisis de texto al día</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <div class="audience-role">Profesionales</div>
+      <div class="audience-title">Periodistas y redacciones</div>
+      <ul class="audience-list">
+        <li>Fact-checking rápido antes de publicar</li>
+        <li>Auditoría de calidad interna</li>
+        <li>Comparación con artículos de competencia</li>
+        <li>Análisis de URLs en tiempo real</li>
+      </ul>
+    </div>
+    <div class="audience-card">
+      <div class="audience-role">Instituciones</div>
+      <div class="audience-title">Educación e investigación</div>
+      <ul class="audience-list">
+        <li>Recurso didáctico en alfabetización mediática</li>
+        <li>Corpus verificado para investigación académica</li>
+        <li>Análisis de tendencias en medios digitales</li>
+        <li>Explorador público de análisis compartidos</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ── TECH CREDIBILITY ───────────────────────────── -->
+<div class="section tech-section">
+  <div class="section-eyebrow">Base tecnológica</div>
+  <h2>Construido para <em>escalar</em></h2>
+  <div class="tech-pillars">
+    <div class="tech-pillar">
+      <div class="pillar-label">Arquitectura</div>
+      <div class="pillar-title">Separación total frontend/backend</div>
+      <div class="pillar-desc">React 19 + Vite en Vercel (CDN global). Spring Boot 3.5 en Render. API REST stateless. Despliegue independiente sin acoplamiento.</div>
+    </div>
+    <div class="tech-pillar">
+      <div class="pillar-label">Modelo de IA</div>
+      <div class="pillar-title">Multi-proveedor + VeriAI en construcción</div>
+      <div class="pillar-desc">Rotación entre 5 APIs cloud (Cerebras, Gemini, Mistral, SambaNova, Cloudflare) con failover automático — sin dependencia de un único proveedor ni su free tier. Orquestador AiOrchestrator separa la lógica del proveedor. Migración a modelo propio (VeriAI) sin cambios de código.</div>
+    </div>
+    <div class="tech-pillar">
+      <div class="pillar-label">Seguridad</div>
+      <div class="pillar-title">JWT + BCrypt + CORS configurable</div>
+      <div class="pillar-desc">Sin sesiones de servidor. Contraseñas solo como hashes BCrypt. CORS por variable de entorno. Roles: ANON, USER, PREMIUM, ADMIN.</div>
+    </div>
+    <div class="tech-pillar">
+      <div class="pillar-label">Observabilidad</div>
+      <div class="pillar-title">Dataset de entrenamiento nativo</div>
+      <div class="pillar-desc">Cada análisis genera un registro en EntrenamientoDataset con la respuesta del modelo, el score IMI y (cuando activo) la divergencia con el modelo local.</div>
+    </div>
+  </div>
+  <div class="tech-stack-chips">
+    <div class="tech-chip">React 19</div>
+    <div class="tech-chip">Spring Boot 3.5</div>
+    <div class="tech-chip">Java 17</div>
+    <div class="tech-chip">MySQL 8</div>
+    <div class="tech-chip">JWT / HMAC-SHA256</div>
+    <div class="tech-chip">Multi-API cloud (5 proveedores)</div>
+    <div class="tech-chip">Ollama / LLM local</div>
+    <div class="tech-chip">Jsoup (scraping)</div>
+    <div class="tech-chip">Gmail SMTP</div>
+    <div class="tech-chip">Vercel CDN</div>
+    <div class="tech-chip">Render (Docker)</div>
+    <div class="tech-chip">Swagger / OpenAPI</div>
+  </div>
+</div>
+
+<!-- ── COMPETITIVE ────────────────────────────────── -->
+<div class="section">
+  <div class="section-eyebrow">Posicionamiento</div>
+  <h2>toVeriAI vs. <em>alternativas</em></h2>
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th>Característica</th>
+        <th style="background:var(--green)">toVeriAI</th>
+        <th>NewsGuard</th>
+        <th>Maldita.es</th>
+        <th>Media Bias Chart</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Análisis automático por IA</td>
+        <td class="comp-yes comp-ours">✓ Segundos</td>
+        <td class="comp-partial">Manual + IA</td>
+        <td class="comp-no">Manual</td>
+        <td class="comp-no">Manual</td>
+      </tr>
+      <tr>
+        <td>Análisis de URL en tiempo real</td>
+        <td class="comp-yes comp-ours">✓</td>
+        <td class="comp-partial">Solo medios catalogados</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Análisis de texto pegado</td>
+        <td class="comp-yes comp-ours">✓</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Análisis de imagen / captura</td>
+        <td class="comp-yes comp-ours">✓</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Evidencia textual citada</td>
+        <td class="comp-yes comp-ours">✓ Citas en «»</td>
+        <td class="comp-partial">Resúmenes</td>
+        <td class="comp-partial">Parcial</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Dimensiones de credibilidad evaluadas</td>
+        <td class="comp-yes comp-ours">✓ 9 (7 contenido + 2 medio)</td>
+        <td class="comp-yes">✓ (9 criterios)</td>
+        <td class="comp-partial">Parcial</td>
+        <td class="comp-no">Solo sesgo político</td>
+      </tr>
+      <tr>
+        <td>Multilingüe</td>
+        <td class="comp-yes comp-ours">✓ Cualquier idioma</td>
+        <td class="comp-partial">Limitado</td>
+        <td class="comp-no">Solo español</td>
+        <td class="comp-no">Solo inglés</td>
+      </tr>
+      <tr>
+        <td>Acceso gratuito</td>
+        <td class="comp-yes comp-ours">✓ Freemium</td>
+        <td class="comp-no">Suscripción</td>
+        <td class="comp-yes">✓</td>
+        <td class="comp-yes">✓</td>
+      </tr>
+      <tr>
+        <td>Modelo de IA propio (roadmap)</td>
+        <td class="comp-yes comp-ours">✓ VeriAI</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Open para cualquier artículo</td>
+        <td class="comp-yes comp-ours">✓ Sin límite de medios</td>
+        <td class="comp-no">Catálogo cerrado</td>
+        <td class="comp-partial">Selección editorial</td>
+        <td class="comp-no">Catálogo cerrado</td>
+      </tr>
+      <tr>
+        <td>Gamificación y hábito de uso</td>
+        <td class="comp-yes comp-ours">✓ Racha + recompensa</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Participación comunitaria en el veredicto</td>
+        <td class="comp-yes comp-ours">✓ ¿Coincides con la IA?</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Ranking y vigilancia continua de medios</td>
+        <td class="comp-yes comp-ours">✓ Ranking + seguimiento</td>
+        <td class="comp-partial">Solo ranking</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
+      </tr>
+      <tr>
+        <td>Modelo de IA propio explicado en abierto</td>
+        <td class="comp-yes comp-ours">✓ Página pública Veri-AI</td>
+        <td class="comp-no">Caja negra</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">Caja negra</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ── CTA ────────────────────────────────────────── -->
+<div class="cta-section">
+  <h2>Prueba toVeriAI hoy</h2>
+  <p>Analiza tu primer artículo en menos de 30 segundos, sin registro. Gratis.</p>
+  <div class="cta-urls">
+    <a class="cta-url primary" href="https://verinews-ai.vercel.app">Ir a la plataforma</a>
+  </div>
+</div>
+
+</body>
+</html>
