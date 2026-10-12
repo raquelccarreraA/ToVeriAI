@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>toVeriAI — La IA que te dice cuánto puedes fiarte de una noticia</title>
+<meta name="description" content="toVeriAI analiza noticias con IA y devuelve un índice de credibilidad de 0 a 100, explicado dimensión a dimensión con citas del artículo. Proyecto de Raquel Comesaña Carrera.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232D6A4F%22/%3E%3Ctext x=%2250%22 y=%2268%22 font-size=%2252%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Georgia,serif%22%3EV%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --dark: #1A1A1A;
+    --green: #2D6A4F;
+    --green-light: #b8d9cb;
+    --bg: #F7F5F2;
+    --card: #FDFCFB;
+    --border: #E8E4DF;
+    --muted: #777;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', system-ui, sans-serif; background: var(--bg); color: var(--dark); line-height: 1.7; }
+  a { color: inherit; }
+
+  .cover {
+    background: linear-gradient(160deg, #0f1f18 0%, #1A1A1A 50%, #1e3328 100%);
+    color: #fff; padding: 96px 10vw 72px;
+  }
+  .eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--green-light); display: flex; align-items: center; gap: 14px; margin-bottom: 28px; }
+  .eyebrow::before { content: ''; width: 32px; height: 1px; background: var(--green-light); }
+  h1 { font-family: 'Cormorant Garamond', serif; font-size: clamp(52px, 8vw, 96px); font-weight: 300; line-height: 1; margin-bottom: 24px; }
+  h1 em { font-style: italic; color: var(--green-light); }
+  .tagline { font-size: clamp(17px, 2vw, 21px); font-weight: 300; color: rgba(255,255,255,0.65); max-width: 640px; margin-bottom: 40px; }
+  .actions { display: flex; gap: 14px; flex-wrap: wrap; margin-bottom: 56px; }
+  .btn { display: inline-block; padding: 13px 26px; font-size: 14px; font-weight: 500; text-decoration: none; border: 1px solid rgba(255,255,255,0.25); color: #fff; transition: background .2s, border-color .2s; }
+  .btn:hover { border-color: var(--green-light); }
+  .btn.primary { background: var(--green); border-color: var(--green); }
+  .btn.primary:hover { background: #3d8c66; }
+  .stats { display: flex; gap: 40px; flex-wrap: wrap; }
+  .stat .num { font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 300; color: var(--green-light); line-height: 1; }
+  .stat .label { font-size: 12px; color: rgba(255,255,255,0.45); margin-top: 4px; }
+
+  main { max-width: 1040px; margin: 0 auto; padding: 72px 6vw 40px; }
+  section { margin-bottom: 72px; }
+  .section-eyebrow { font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--green); display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+  .section-eyebrow::before { content: ''; width: 24px; height: 1px; background: var(--green); }
+  h2 { font-family: 'Cormorant Garamond', serif; font-size: clamp(32px, 4vw, 44px); font-weight: 300; line-height: 1.15; margin-bottom: 28px; }
+
+  .shot { display: block; width: 100%; height: auto; border: 1px solid var(--border); box-shadow: 0 12px 40px rgba(0,0,0,0.08); }
+
+  .docs { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+  .doc { display: block; background: var(--card); border: 1px solid var(--border); padding: 28px; text-decoration: none; transition: border-color .2s, transform .2s; }
+  .doc:hover { border-color: var(--green); transform: translateY(-2px); }
+  .doc .icon { font-size: 26px; margin-bottom: 12px; }
+  .doc h3 { font-family: 'Cormorant Garamond', serif; font-size: 26px; font-weight: 400; margin-bottom: 8px; }
+  .doc p { font-size: 14px; color: var(--muted); }
+  .doc .more { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 500; color: var(--green); }
+
+  .highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 28px; }
+  .hl strong { display: block; font-weight: 600; margin-bottom: 4px; }
+  .hl p { font-size: 14px; color: #555; }
+
+  .note { border-left: 3px solid var(--green); background: rgba(45,106,79,0.07); padding: 18px 22px; font-size: 14px; color: #333; }
+
+  footer { border-top: 1px solid var(--border); padding: 36px 6vw 48px; text-align: center; font-size: 14px; color: var(--muted); }
+  footer strong { color: var(--dark); font-weight: 500; }
+  footer nav { margin-top: 10px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
+  footer a { color: var(--green); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+
+  @media (max-width: 640px) {
+    .cover { padding: 72px 16px 56px; }
+    main { padding: 56px 16px 32px; }
+    footer { padding: 32px 16px 40px; }
+    .stats { gap: 24px 32px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="cover">
+  <div class="eyebrow">Verificación de noticias con IA</div>
+  <h1>toVeri<em>AI</em></h1>
+  <p class="tagline">La IA que te dice cuánto puedes fiarte de una noticia, y por qué. Pega un texto, una URL o una captura y obtén un índice de credibilidad de 0 a 100, explicado con citas del artículo.</p>
+  <div class="actions">
+    <a class="btn primary" href="https://www.toveriai.com">Probar toveriai.com</a>
+    <a class="btn" href="Documentacion/toveriai.html">Presentación del producto</a>
+    <a class="btn" href="Documentacion/manual-usuario.html">Manual de usuario</a>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="num">9</div><div class="label">dimensiones de análisis</div></div>
+    <div class="stat"><div class="num">3</div><div class="label">modos: texto, URL e imagen</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">proveedores de IA en rotación</div></div>
+    <div class="stat"><div class="num">5</div><div class="label">idiomas</div></div>
+    <div class="stat"><div class="num">v2</div><div class="label">de mi propio modelo de IA</div></div>
+  </div>
+</header>
+
+<main>
+  <section>
+    <img class="shot" src="docs/toveriai-home.png" alt="Página de inicio de toVeriAI" width="1350" height="600" loading="lazy">
+  </section>
+
+  <section>
+    <div class="section-eyebrow">Documentación</div>
+    <h2>Conoce el proyecto</h2>
+    <div class="docs">
+      <a class="doc" href="Documentacion/toveriai.html">
+        <div class="icon">📣</div>
+        <h3>Presentación del producto</h3>
+        <p>El problema que resuelve, la metodología IMI, las funcionalidades, la base tecnológica y la comparativa con otras alternativas.</p>
+        <span class="more">Leer la presentación →</span>
+      </a>
+      <a class="doc" href="Documentacion/manual-usuario.html">
+        <div class="icon">📘</div>
+        <h3>Manual de usuario</h3>
+        <p>Cómo registrarse, analizar por texto, URL o imagen, interpretar las 9 dimensiones, planes, límites y preguntas frecuentes.</p>
+        <span class="more">Abrir el manual →</span>
+      </a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-eyebrow">Lo más destacado</div>
+    <h2>Qué hay detrás</h2>
+    <div class="highlights">
+      <div class="hl"><strong>🧠 Modelo propio: VeriAI</strong><p>Cada análisis alimenta un dataset con el que hago fine-tuning en local. Va por la v2 (Qwen 2.5 7B).</p></div>
+      <div class="hl"><strong>⚡ Cinco LLMs en rotación</strong><p>Cerebras, Gemini, Mistral, SambaNova y Cloudflare, con failover automático gestionado por un orquestador propio.</p></div>
+      <div class="hl"><strong>🔍 Explicable</strong><p>El Índice de Métricas Interpretativas (IMI) sigue criterios de NewsGuard, IFCN y The Trust Project, y cada nota cita el artículo.</p></div>
+      <div class="hl"><strong>👥 Comunidad</strong><p>Feed público con votos, ranking de medios, avisos de cambios de fiabilidad y rachas con recompensa.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="note">El código fuente es privado: este sitio es un escaparate del proyecto. Te lo enseño encantada en una entrevista.</p>
+  </section>
+</main>
+
+<footer>
+  <div><strong>Raquel Comesaña Carrera</strong> · Desarrolladora full stack (Java · Spring Boot · React) · A Coruña</div>
+  <nav>
+    <a href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">Portfolio</a>
+    <a href="https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195">LinkedIn</a>
+    <a href="https://github.com/raquelccarreraA/ToVeriAI">GitHub</a>
+    <a href="mailto:raquel.ccarrera@gmail.com">raquel.ccarrera@gmail.com</a>
+  </nav>
+</footer>
+
+</body>
+</html>
