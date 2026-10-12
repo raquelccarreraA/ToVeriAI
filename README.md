@@ -69,8 +69,8 @@ flowchart LR
 
 | Documento | Qué encontrarás |
 |---|---|
-| 📣 [**Presentación del producto**](https://htmlpreview.github.io/?https://github.com/raquelccarreraA/ToVeriAI/blob/main/Documentacion/toveriai.html) | El problema que resuelve, la metodología IMI, las funcionalidades, la base tecnológica y la comparativa con otras alternativas. |
-| 📘 [**Manual de usuario**](https://htmlpreview.github.io/?https://github.com/raquelccarreraA/ToVeriAI/blob/main/Documentacion/manual-usuario.html) | Cómo registrarse, analizar por texto, URL o imagen, interpretar las 9 dimensiones, planes, límites y preguntas frecuentes. |
+| 📣 [**Presentación del producto**](https://raquelccarreraa.github.io/ToVeriAI/Documentacion/toveriai.html) | El problema que resuelve, la metodología IMI, las funcionalidades, la base tecnológica y la comparativa con otras alternativas. |
+| 📘 [**Manual de usuario**](https://raquelccarreraa.github.io/ToVeriAI/Documentacion/manual-usuario.html) | Cómo registrarse, analizar por texto, URL o imagen, interpretar las 9 dimensiones, planes, límites y preguntas frecuentes. |
 
 > El código fuente es privado: este repositorio es un escaparate del proyecto. Te lo enseño encantada en una entrevista.
 
