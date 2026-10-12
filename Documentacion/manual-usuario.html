@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>toVeriAI — Manual de Usuario v1.1</title>
+<meta name="description" content="Manual de usuario de toVeriAI: cómo analizar noticias por texto, URL o imagen, interpretar el índice IMI y sacar partido a la plataforma.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232D6A4F%22/%3E%3Ctext x=%2250%22 y=%2268%22 font-size=%2252%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Georgia,serif%22%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet">
 <style>
@@ -195,8 +197,8 @@
   <div class="section" id="que-es">
     <div class="section-eyebrow">Introducción</div>
     <h2>¿Qué es toVeriAI?</h2>
-    <p>toVeriAI es una plataforma de verificación de credibilidad periodística impulsada por inteligencia artificial. Analiza artículos de noticias y los puntúa según el <strong>Índice de Medición de Integridad (IMI)</strong>, evaluando 7 dimensiones periodísticas clave.</p>
-    <p>Puedes analizar cualquier noticia pegando su texto directamente o introduciendo la URL del artículo. El análisis es profundo, objetivo y se entrega en segundos.</p>
+    <p>toVeriAI es una plataforma de verificación de credibilidad periodística impulsada por inteligencia artificial. Analiza artículos de noticias y los puntúa según el <strong>Índice de Métricas Interpretativas (IMI)</strong>, evaluando hasta 9 dimensiones periodísticas: 7 de contenido en todos los modos y 2 de transparencia del medio en el análisis por URL.</p>
+    <p>Puedes analizar cualquier noticia pegando su texto directamente, introduciendo la URL del artículo o subiendo una captura de la noticia. El análisis es profundo, objetivo y se entrega en segundos.</p>
 
     <div class="features">
       <div class="feature">
@@ -268,8 +270,11 @@
       <strong>¿No te llegó el email de verificación?</strong> Inicia sesión con tu cuenta — aparecerá un banner en la parte superior con el botón <strong>"Reenviar email"</strong>.
     </div>
 
+    <h3>Acceso con Google</h3>
+    <p>Si lo prefieres, puedes registrarte e iniciar sesión con tu <strong>cuenta de Google</strong> desde las pantallas de "Registrarse" o "Iniciar sesión". No necesitas crear una contraseña ni verificar tu email: Google ya confirma que la dirección es tuya. Si ya tenías una cuenta creada con ese mismo email, accederás a ella.</p>
+
     <h3>Inicio de sesión</h3>
-    <p>Haz clic en "Iniciar sesión" en el menú de navegación. Introduce tu email y contraseña. Si marcas la contraseña como visible, puedes comprobar que la has escrito correctamente antes de enviar.</p>
+    <p>Haz clic en "Iniciar sesión" en el menú de navegación. Introduce tu email y contraseña, o usa el botón de Google. Si marcas la contraseña como visible, puedes comprobar que la has escrito correctamente antes de enviar.</p>
   </div>
 
   <div class="divider"></div>
@@ -333,7 +338,7 @@
         <div class="step-num">3</div>
         <div class="step-content">
           <strong>Analiza</strong>
-          <p>toVeriAI extrae el texto automáticamente y lanza el análisis. Los resultados son idénticos al modo texto.</p>
+          <p>toVeriAI extrae el texto automáticamente y lanza el análisis. Obtienes las mismas 7 dimensiones que en modo texto, más 2 dimensiones exclusivas de este modo: Transparencia del Medio y Autoría.</p>
         </div>
       </div>
     </div>
@@ -374,7 +379,7 @@
         <tr><td>Administrador</td><td style="text-align:center;">∞</td><td style="text-align:center;">∞</td><td style="text-align:center;">∞</td></tr>
       </table>
     </div>
-    <div class="callout warn"><strong>¿Ya se ha analizado antes?</strong> Si pegas una URL que ya se había analizado, toVeriAI te avisa en lugar de lanzar un análisis nuevo — así no gastas tu cupo diario. Si el medio ha editado el artículo desde entonces, sí se genera un análisis nuevo y se te avisa de que el contenido ha cambiado, mostrándote también el resultado anterior para que puedas compararlos. Solo se descuenta uno de tus análisis del día cuando realmente se ejecuta un análisis nuevo con IA.</div>
+    <div class="callout warn"><strong>¿Ya se ha analizado antes?</strong> Si el contenido que envías — un texto, una URL o una captura — ya se había analizado, toVeriAI lo reconoce por su huella digital (hash) y te muestra el resultado existente al instante, sin volver a llamar a la IA y sin gastar tu cupo diario. En las URL, la huella se calcula sobre el artículo tal y como está publicado en ese momento: si el medio lo ha editado desde entonces, sí se genera un análisis nuevo, se te avisa de que el contenido ha cambiado y se te muestra también el resultado anterior para que puedas compararlos. Solo se descuenta uno de tus análisis del día cuando realmente se ejecuta un análisis nuevo con IA.</div>
   </div>
 
   <div class="divider"></div>
@@ -385,7 +390,7 @@
     <h2>Entendiendo los resultados</h2>
 
     <h3>El score IMI global</h3>
-    <p>El Índice de Medición de Integridad (IMI) va de 0 a 100 y resume la credibilidad del artículo en un único número.</p>
+    <p>El Índice de Métricas Interpretativas (IMI) va de 0 a 100 y resume la credibilidad del artículo en un único número.</p>
 
     <div class="imi-scale">
       <div class="imi-red"><div class="imi-label">Credibilidad baja</div><div class="imi-range">0 – 49</div></div>
@@ -393,8 +398,8 @@
       <div class="imi-green"><div class="imi-label">Alta credibilidad</div><div class="imi-range">75 – 100</div></div>
     </div>
 
-    <h3>Las 7 dimensiones</h3>
-    <p>El score global se construye a partir de 7 dimensiones periodísticas. Cada una muestra el número de alertas detectadas (0 = ningún problema, 5 = problemas graves) y una explicación detallada.</p>
+    <h3>Las 9 dimensiones</h3>
+    <p>El score global se construye a partir de 7 dimensiones periodísticas de contenido, a las que el modo URL añade 2 de transparencia del medio. Cada una muestra el número de alertas detectadas (0 = ningún problema, 5 = problemas graves) y una explicación detallada.</p>
 
     <p>Las primeras 7 dimensiones aplican siempre. Las dimensiones 8 y 9 solo están disponibles en el <strong>modo URL</strong>, ya que requieren analizar las páginas del propio medio.</p>
     <div class="dim-grid">
@@ -406,7 +411,7 @@
       <div class="dim-card"><div class="dim-n">6</div><div><div class="dim-name">Tono</div><div class="dim-desc">Mide si el propósito del texto es informar (alertas bajas) o persuadir / generar alarma (alertas altas). Titulares sensacionalistas suben la alerta.</div></div></div>
       <div class="dim-card"><div class="dim-n">7</div><div><div class="dim-name">Cifras</div><div class="dim-desc">Verifica que los datos numéricos y estadísticas tengan fuente y contexto. Números coloquiales ("dos días") no cuentan como afirmaciones numéricas.</div></div></div>
       <div class="dim-card" style="border-left: 3px solid var(--green);"><div class="dim-n">8</div><div><div class="dim-name">Transparencia del Medio <span style="font-size:11px;font-weight:400;color:var(--green);">solo URL</span></div><div class="dim-desc">Evalúa si el medio identifica claramente quién lo posee y cómo se financia, analizando sus páginas "Sobre nosotros" y "Aviso legal". Basado en criterios NewsGuard 7+8.</div></div></div>
-      <div class="dim-card" style="border-left: 3px solid var(--green);"><div class="dim-n">9</div><div><div class="dim-name">Autoría <span style="font-size:11px;font-weight:400;color:var(--green);">solo URL</span></div><div class="dim-desc">Evalúa la identificación del autor del artículo: nombre + cargo (0 alertas) → seudónimo (2) → "Redacción" genérica (3) → sin autor (4) → autor falso (5). Criterio NewsGuard 9.</div></div></div>
+      <div class="dim-card" style="border-left: 3px solid var(--green);"><div class="dim-n">9</div><div><div class="dim-name">Autoría <span style="font-size:11px;font-weight:400;color:var(--green);">solo URL</span></div><div class="dim-desc">Evalúa la identificación del autor del artículo: nombre + cargo (0 alertas) → nombre sin cargo (1) → seudónimo (2) → "Redacción" genérica (3) → sin autor (4) → autor falso (5). Criterio NewsGuard 9.</div></div></div>
     </div>
 
     <h3>Más contexto en cada dimensión</h3>
@@ -575,7 +580,7 @@
       </div>
       <div class="faq-item">
         <div class="faq-q">¿Puedo analizar el mismo artículo varias veces?</div>
-        <div class="faq-a">Si pegas una URL que ya se había analizado, toVeriAI te avisa y te muestra el resultado existente en lugar de gastar un análisis nuevo. Si el medio ha editado el artículo desde entonces, sí se genera un análisis nuevo — se te avisa de que el contenido ha cambiado y puedes comparar con el resultado anterior. Solo se descuenta uno de tus análisis del día cuando realmente se ejecuta un análisis nuevo con IA.</div>
+        <div class="faq-a">Sí, pero no te costará cupo. Si el contenido que envías — un texto, una URL o una captura — ya se había analizado, toVeriAI lo reconoce por su huella digital (hash) y te muestra el resultado existente al instante, sin volver a llamar a la IA y sin gastar tu cupo diario. En las URL, la huella se calcula sobre el artículo tal y como está publicado en ese momento: si el medio lo ha editado desde entonces, sí se genera un análisis nuevo, se te avisa de que el contenido ha cambiado y se te muestra también el resultado anterior para que puedas compararlos. Solo se descuenta uno de tus análisis del día cuando realmente se ejecuta un análisis nuevo con IA.</div>
       </div>
       <div class="faq-item">
         <div class="faq-q">¿El score IMI es 100% fiable?</div>

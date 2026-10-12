@@ -4,6 +4,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>toVeriAI — La plataforma de verificación de credibilidad periodística</title>
+<meta name="description" content="toVeriAI analiza noticias con IA y devuelve un índice de credibilidad de 0 a 100, explicado dimensión a dimensión con citas del artículo.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22%232D6A4F%22/%3E%3Ctext x=%2250%22 y=%2268%22 font-size=%2252%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Georgia,serif%22%3EV%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
@@ -174,6 +176,8 @@
   .tech-chip { padding: 6px 14px; border: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; }
 
   /* ── COMPETITIVE ────────────────────────── */
+  .comp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 40px; }
+  .comp-wrap .comp-table { margin-top: 0; min-width: 640px; }
   .comp-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 13.5px; }
   .comp-table th { background: var(--dark); color: #fff; padding: 12px 20px; text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
   .comp-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); color: #444; }
@@ -398,7 +402,7 @@
       <div class="feature-icon">🗄️</div>
       <div class="feature-body">
         <div class="feature-title">Caché inteligente</div>
-        <div class="feature-desc">El mismo artículo analizado en las últimas 24h devuelve el resultado cacheado instantáneamente, sin consumir tokens de API ni tiempo de procesamiento.</div>
+        <div class="feature-desc">Cada contenido se identifica por su huella digital (hash SHA-256). Si ya se analizó, el resultado se devuelve al instante, sin consumir tokens de API ni cupo del usuario. Si el medio edita el artículo, la huella cambia: se analiza de nuevo y se muestra la comparación con el resultado anterior.</div>
       </div>
     </div>
     <div class="feature">
@@ -419,7 +423,7 @@
       <div class="feature-icon">🛡️</div>
       <div class="feature-body">
         <div class="feature-title">Seguridad JWT stateless</div>
-        <div class="feature-desc">Autenticación sin sesiones de servidor. Tokens HMAC-SHA256 con expiración de 2h. Doble verificación de email en el registro.</div>
+        <div class="feature-desc">Autenticación sin sesiones de servidor. Tokens HMAC-SHA256 con expiración de 2h. Verificación de email en el registro o acceso con Google.</div>
       </div>
     </div>
     <div class="feature">
@@ -572,6 +576,7 @@
 <div class="section">
   <div class="section-eyebrow">Posicionamiento</div>
   <h2>toVeriAI vs. <em>alternativas</em></h2>
+  <div class="comp-wrap">
   <table class="comp-table">
     <thead>
       <tr>
@@ -677,12 +682,13 @@
       <tr>
         <td>Modelo de IA propio explicado en abierto</td>
         <td class="comp-yes comp-ours">✓ Página pública Veri-AI</td>
-        <td class="comp-no">Caja negra</td>
         <td class="comp-no">—</td>
-        <td class="comp-no">Caja negra</td>
+        <td class="comp-no">—</td>
+        <td class="comp-no">—</td>
       </tr>
     </tbody>
   </table>
+  </div>
 </div>
 
 <!-- ── CTA ────────────────────────────────────────── -->
@@ -690,7 +696,7 @@
   <h2>Prueba toVeriAI hoy</h2>
   <p>Analiza tu primer artículo en menos de 30 segundos, sin registro. Gratis.</p>
   <div class="cta-urls">
-    <a class="cta-url primary" href="https://verinews-ai.vercel.app">Ir a la plataforma</a>
+    <a class="cta-url primary" href="https://www.toveriai.com">Ir a la plataforma</a>
   </div>
 </div>
 
