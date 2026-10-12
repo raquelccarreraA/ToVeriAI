@@ -27,7 +27,11 @@
 
   /* ── COVER ── */
   .cover {
-    background: linear-gradient(160deg, #3a7d5d 0%, #2D6A4F 45%, #1f4d39 100%);
+    background:
+      radial-gradient(60% 70% at 88% 8%, rgba(120,214,166,0.45) 0%, transparent 60%),
+      radial-gradient(55% 65% at 6% 96%, rgba(29,120,116,0.65) 0%, transparent 62%),
+      radial-gradient(35% 40% at 62% 72%, rgba(224,179,84,0.16) 0%, transparent 70%),
+      linear-gradient(160deg, #24654b 0%, #1b5440 50%, #164534 100%);
     min-height: 100vh; display: flex; flex-direction: column;
     justify-content: center; align-items: flex-start;
     padding: 80px 10vw; position: relative; overflow: hidden;
@@ -53,11 +57,27 @@
   .cover-chips { display: flex; gap: 12px; flex-wrap: wrap; }
   .chip { padding: 6px 16px; border: 1px solid rgba(255,255,255,0.45); color: rgba(255,255,255,0.9); font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase; }
 
+  /* ── BOTÓN VOLVER ── */
+  .back-link {
+    position: fixed; top: 14px; left: 18px; z-index: 200;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 16px 9px 13px; border-radius: 999px;
+    background: rgba(255,255,255,0.9); color: #2D6A4F;
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    border: 1px solid rgba(45,106,79,0.18);
+    box-shadow: 0 6px 20px -6px rgba(18,61,46,0.35);
+    -webkit-backdrop-filter: blur(10px); backdrop-filter: blur(10px);
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .back-link:hover { transform: translateX(-2px); background: #fff; box-shadow: 0 10px 26px -6px rgba(18,61,46,0.45); }
+  .back-link span { font-size: 16px; line-height: 1; }
+  @media print { .back-link { display: none; } }
+
   /* ── NAV BAR ── */
   .topnav {
     background: #1c3028; position: sticky; top: 0; z-index: 100;
     display: flex; gap: 0; border-bottom: 1px solid rgba(255,255,255,0.08);
-    flex-wrap: wrap;
+    flex-wrap: wrap; padding-left: 112px;
   }
   .topnav a {
     padding: 16px 24px; color: rgba(255,255,255,0.5); text-decoration: none;
@@ -166,6 +186,8 @@
 <body>
 
 <!-- PORTADA -->
+<a class="back-link" href="../index.html" aria-label="Volver a la página de inicio"><span>←</span> Volver</a>
+
 <div class="cover">
   <div class="cover-watermark">IMI</div>
   <div class="eyebrow">Manual de usuario</div>
