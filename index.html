@@ -56,7 +56,9 @@
   .doc p { font-size: 14px; color: var(--muted); }
   .doc .more { display: inline-block; margin-top: 16px; font-size: 13px; font-weight: 500; color: var(--green); }
 
-  .highlights { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 28px; }
+  .highlights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 28px; }
+  @media (max-width: 900px) { .highlights { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 520px) { .highlights { grid-template-columns: 1fr; } }
   .hl strong { display: block; font-weight: 600; margin-bottom: 4px; }
   .hl p { font-size: 14px; color: #555; }
 
@@ -98,7 +100,7 @@
 
 <main>
   <section>
-    <img class="shot" src="docs/toveriai-home.png" alt="Página de inicio de toVeriAI" width="1350" height="600" loading="lazy">
+    <img class="shot" src="docs/toveriai-home.png" alt="Página de inicio de toVeriAI" width="1350" height="600">
   </section>
 
   <section>
