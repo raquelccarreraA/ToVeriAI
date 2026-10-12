@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 980 330" width="980" height="330" role="img" aria-labelledby="t d">
+  <title id="t">Arquitectura de toVeriAI</title>
+  <desc id="d">El usuario accede al frontend React en Vercel, que llama por REST con JWT al backend Spring Boot en Render. El backend usa MySQL, un orquestador de IA que rota entre cinco proveedores con failover, y genera el dataset para el fine-tuning local de VeriAI.</desc>
+  <defs>
+    <marker id="a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M0 0 L10 5 L0 10 z" fill="#2D6A4F"/>
+    </marker>
+    <style>
+      text { font-family: 'DM Sans', 'Segoe UI', Helvetica, Arial, sans-serif; }
+      .box { fill: #FDFCFB; stroke: #2D6A4F; stroke-width: 1.5; }
+      .key { fill: #2D6A4F; stroke: #2D6A4F; stroke-width: 1.5; }
+      .t { font-size: 15px; font-weight: 600; fill: #1A1A1A; text-anchor: middle; }
+      .s { font-size: 12px; fill: #666; text-anchor: middle; }
+      .tw { font-size: 15px; font-weight: 600; fill: #fff; text-anchor: middle; }
+      .sw { font-size: 12px; fill: #d6ebe1; text-anchor: middle; }
+      .l { font-size: 11.5px; fill: #2D6A4F; font-weight: 500; text-anchor: middle; }
+      .e { fill: none; stroke: #2D6A4F; stroke-width: 1.5; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="980" height="330" rx="16" fill="#F7F5F2"/>
+
+  <!-- Usuario -->
+  <rect class="box" x="24" y="137" width="110" height="56" rx="8"/>
+  <text class="t" x="79" y="170">Usuario</text>
+
+  <!-- Frontend -->
+  <rect class="box" x="176" y="131" width="160" height="68" rx="8"/>
+  <text class="t" x="256" y="160">React 19 + Vite</text>
+  <text class="s" x="256" y="180">Frontend · Vercel</text>
+
+  <!-- Backend -->
+  <rect class="key" x="412" y="131" width="170" height="68" rx="8"/>
+  <text class="tw" x="497" y="160">Spring Boot 3.5</text>
+  <text class="sw" x="497" y="180">API REST · Render · Docker</text>
+
+  <!-- MySQL -->
+  <rect class="box" x="640" y="26" width="160" height="56" rx="8"/>
+  <text class="t" x="720" y="51">MySQL 8</text>
+  <text class="s" x="720" y="69">Base de datos</text>
+
+  <!-- Orquestador -->
+  <rect class="key" x="640" y="131" width="160" height="68" rx="8"/>
+  <text class="tw" x="720" y="160">Orquestador IA</text>
+  <text class="sw" x="720" y="180">rotación + failover</text>
+
+  <!-- VeriAI -->
+  <rect class="box" x="640" y="240" width="160" height="64" rx="8"/>
+  <text class="t" x="720" y="267">VeriAI</text>
+  <text class="s" x="720" y="286">fine-tuning en local</text>
+
+  <!-- Proveedores -->
+  <rect class="box" x="838" y="117" width="128" height="96" rx="8"/>
+  <text class="t" x="902" y="142">5 LLMs</text>
+  <text class="s" x="902" y="162">Cerebras · Gemini</text>
+  <text class="s" x="902" y="180">Mistral · SambaNova</text>
+  <text class="s" x="902" y="198">Cloudflare</text>
+
+  <!-- Flechas -->
+  <path class="e" d="M134 165 H174" marker-end="url(#a)"/>
+  <path class="e" d="M336 165 H410" marker-end="url(#a)"/>
+  <text class="l" x="373" y="155">REST + JWT</text>
+  <path class="e" d="M582 150 C612 150 612 54 638 54" marker-end="url(#a)"/>
+  <path class="e" d="M582 165 H638" marker-end="url(#a)"/>
+  <path class="e" d="M582 180 C612 180 612 272 638 272" marker-end="url(#a)"/>
+  <text class="l" x="590" y="262">dataset</text>
+  <path class="e" d="M800 165 H836" marker-end="url(#a)"/>
+</svg>

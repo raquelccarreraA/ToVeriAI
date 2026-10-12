@@ -30,7 +30,7 @@
   /* ── HERO COVER ─────────────────────────── */
   .cover {
     min-height: 100vh;
-    background: linear-gradient(160deg, #0f1f18 0%, #1A1A1A 50%, #1e3328 100%);
+    background: linear-gradient(160deg, #3a7d5d 0%, #2D6A4F 45%, #1f4d39 100%);
     display: flex; flex-direction: column; justify-content: center;
     padding: 80px 10vw;
     position: relative; overflow: hidden;
@@ -38,7 +38,7 @@
   .cover::before {
     content: '';
     position: absolute; top: -30%; right: -10%; width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(45,106,79,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
     pointer-events: none;
   }
   .cover-eyebrow {
@@ -54,7 +54,7 @@
   }
   .cover h1 em { font-style: italic; color: var(--green-light); }
   .cover .tagline {
-    font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: rgba(255,255,255,0.55);
+    font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: rgba(255,255,255,0.85);
     max-width: 600px; line-height: 1.7; margin-bottom: 48px;
   }
   .cover-stats {
@@ -64,8 +64,8 @@
     font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300;
     color: var(--green-light); line-height: 1;
   }
-  .cover-stat .label { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; margin-top: 4px; }
-  .cover-scroll { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.2); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
+  .cover-stat .label { font-size: 12px; color: rgba(255,255,255,0.75); letter-spacing: 0.05em; margin-top: 4px; }
+  .cover-scroll { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.55); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
   .cover-scroll::after { content: '↓'; display: block; font-size: 20px; margin-top: 6px; }
 
   /* ── SECTION BASE ───────────────────────── */
