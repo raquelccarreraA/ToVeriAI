@@ -11,6 +11,7 @@
 <style>
   :root {
     --dark: #1A1A1A;
+    --green-deep: #24573f;
     --green: #2D6A4F;
     --green-mid: #3d8c66;
     --green-light: #b8d9cb;
@@ -30,7 +31,7 @@
   /* ── HERO COVER ─────────────────────────── */
   .cover {
     min-height: 100vh;
-    background: linear-gradient(160deg, #0f1f18 0%, #1A1A1A 50%, #1e3328 100%);
+    background: linear-gradient(160deg, #3a7d5d 0%, #2D6A4F 45%, #1f4d39 100%);
     display: flex; flex-direction: column; justify-content: center;
     padding: 80px 10vw;
     position: relative; overflow: hidden;
@@ -38,7 +39,7 @@
   .cover::before {
     content: '';
     position: absolute; top: -30%; right: -10%; width: 700px; height: 700px;
-    background: radial-gradient(circle, rgba(45,106,79,0.18) 0%, transparent 70%);
+    background: radial-gradient(circle, rgba(255,255,255,0.08) 0%, transparent 70%);
     pointer-events: none;
   }
   .cover-eyebrow {
@@ -54,7 +55,7 @@
   }
   .cover h1 em { font-style: italic; color: var(--green-light); }
   .cover .tagline {
-    font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: rgba(255,255,255,0.55);
+    font-size: clamp(16px, 2vw, 20px); font-weight: 300; color: rgba(255,255,255,0.85);
     max-width: 600px; line-height: 1.7; margin-bottom: 48px;
   }
   .cover-stats {
@@ -64,8 +65,8 @@
     font-family: 'Cormorant Garamond', serif; font-size: 48px; font-weight: 300;
     color: var(--green-light); line-height: 1;
   }
-  .cover-stat .label { font-size: 12px; color: rgba(255,255,255,0.4); letter-spacing: 0.05em; margin-top: 4px; }
-  .cover-scroll { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.2); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
+  .cover-stat .label { font-size: 12px; color: rgba(255,255,255,0.75); letter-spacing: 0.05em; margin-top: 4px; }
+  .cover-scroll { position: absolute; bottom: 10px; left: 50%; transform: translateX(-50%); color: rgba(255,255,255,0.55); font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; text-align: center; }
   .cover-scroll::after { content: '↓'; display: block; font-size: 20px; margin-top: 6px; }
 
   /* ── SECTION BASE ───────────────────────── */
@@ -80,28 +81,28 @@
   .divider { height: 1px; background: var(--border); }
 
   /* ── PROBLEM SECTION ────────────────────── */
-  .problem { background: var(--dark); color: #fff; }
+  .problem { background: var(--green-deep); color: #fff; }
   .problem .section-eyebrow { color: var(--green-light); }
   .problem .section-eyebrow::before { background: var(--green-light); }
   .problem h2 { color: #fff; }
   .problem h2 em { color: var(--green-light); }
-  .problem p { color: rgba(255,255,255,0.55); max-width: none; }
-  .problem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.06); margin-top: 56px; }
-  .problem-item { padding: 36px; background: var(--dark); }
-  .problem-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.06); line-height: 1; margin-bottom: 16px; }
+  .problem p { color: rgba(255,255,255,0.82); max-width: none; }
+  .problem-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.15); margin-top: 56px; }
+  .problem-item { padding: 36px; background: var(--green-deep); }
+  .problem-num { font-family: 'Cormorant Garamond', serif; font-size: 64px; font-weight: 300; color: rgba(255,255,255,0.18); line-height: 1; margin-bottom: 16px; }
   .problem-title { font-size: 16px; font-weight: 500; color: #fff; margin-bottom: 10px; }
-  .problem-desc { font-size: 13.5px; color: rgba(255,255,255,0.45); line-height: 1.7; }
+  .problem-desc { font-size: 13.5px; color: rgba(255,255,255,0.78); line-height: 1.7; }
 
   /* ── SOLUTION SECTION ───────────────────── */
   .solution-intro { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
   .solution-visual {
-    background: linear-gradient(135deg, var(--dark) 0%, #1e3328 100%);
+    background: linear-gradient(135deg, #2D6A4F 0%, #1f4d39 100%);
     padding: 48px; display: flex; flex-direction: column; gap: 16px;
   }
   .score-display { text-align: center; padding: 24px 32px 8px; }
-  .score-num { font-family: 'Cormorant Garamond', serif; font-size: 96px; font-weight: 300; line-height: 1; color: #27ae60; }
+  .score-num { font-family: 'Cormorant Garamond', serif; font-size: 96px; font-weight: 300; line-height: 1; color: #fff; }
   .score-verdict { font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--green-light); margin-top: 10px; font-weight: 500; }
-  .score-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.35); margin-top: 6px; }
+  .score-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: rgba(255,255,255,0.7); margin-top: 6px; }
   /* Escala de credibilidad: 3 tramos etiquetados + marcador con el valor del ejemplo */
   .score-scale { position: relative; padding-top: 46px; }
   .score-pointer { position: absolute; top: 0; transform: translateX(-50%); text-align: center; }
@@ -111,7 +112,7 @@
   .score-segments { display: flex; gap: 2px; height: 10px; border-radius: 5px; overflow: hidden; }
   .score-segments .seg { height: 100%; }
   .score-legend { display: flex; margin-top: 10px; }
-  .score-legend span { font-size: 10.5px; color: rgba(255,255,255,0.55); letter-spacing: 0.03em; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
+  .score-legend span { font-size: 10.5px; color: rgba(255,255,255,0.82); letter-spacing: 0.03em; text-align: center; display: flex; align-items: center; justify-content: center; gap: 6px; }
   .score-legend i { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
 
   /* ── DIMENSIONS ─────────────────────────── */
@@ -145,10 +146,10 @@
   .engage-tag { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green); margin-bottom: 8px; font-weight: 500; }
   .engage-title { font-size: 19px; font-weight: 500; margin-bottom: 10px; }
   .engage-desc { font-size: 13.5px; color: #555; line-height: 1.7; }
-  .honest-note { margin-top: 40px; background: var(--dark); color: #fff; padding: 36px 40px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+  .honest-note { margin-top: 40px; background: var(--green-deep); color: #fff; padding: 36px 40px; display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
   .honest-note .hn-icon { font-size: 32px; flex-shrink: 0; }
   .honest-note .hn-title { font-family: 'Cormorant Garamond', serif; font-size: 24px; font-weight: 400; color: #fff; margin-bottom: 8px; }
-  .honest-note .hn-desc { font-size: 13.5px; color: rgba(255,255,255,0.55); line-height: 1.7; max-width: 760px; margin-bottom: 0; }
+  .honest-note .hn-desc { font-size: 13.5px; color: rgba(255,255,255,0.82); line-height: 1.7; max-width: 760px; margin-bottom: 0; }
 
   /* ── AUDIENCE ───────────────────────────── */
   .audience-section { background: #F0EDE8; }
@@ -162,24 +163,25 @@
   .audience-list li::before { content: '→'; color: var(--green); flex-shrink: 0; }
 
   /* ── TECH CREDIBILITY ───────────────────── */
-  .tech-section { background: var(--dark); color: #fff; }
+  .tech-section { background: var(--green-deep); color: #fff; }
   .tech-section .section-eyebrow { color: var(--green-light); }
   .tech-section .section-eyebrow::before { background: var(--green-light); }
   .tech-section h2 { color: #fff; }
-  .tech-section p { color: rgba(255,255,255,0.5); }
-  .tech-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.05); margin-top: 48px; }
-  .tech-pillar { padding: 32px; }
+  .tech-section h2 em { color: var(--green-light); }
+  .tech-section p { color: rgba(255,255,255,0.82); }
+  .tech-pillars { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: rgba(255,255,255,0.15); margin-top: 48px; }
+  .tech-pillar { padding: 32px; background: var(--green-deep); }
   .pillar-label { font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--green-light); margin-bottom: 10px; }
   .pillar-title { font-size: 17px; color: #fff; font-weight: 400; margin-bottom: 10px; }
-  .pillar-desc { font-size: 13px; color: rgba(255,255,255,0.4); line-height: 1.7; }
+  .pillar-desc { font-size: 13px; color: rgba(255,255,255,0.78); line-height: 1.7; }
   .tech-stack-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 32px; }
-  .tech-chip { padding: 6px 14px; border: 1px solid rgba(255,255,255,0.12); font-size: 12px; color: rgba(255,255,255,0.55); letter-spacing: 0.05em; }
+  .tech-chip { padding: 6px 14px; border: 1px solid rgba(255,255,255,0.3); font-size: 12px; color: rgba(255,255,255,0.88); letter-spacing: 0.05em; }
 
   /* ── COMPETITIVE ────────────────────────── */
   .comp-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; margin-top: 40px; }
   .comp-wrap .comp-table { margin-top: 0; min-width: 640px; }
   .comp-table { width: 100%; border-collapse: collapse; margin-top: 40px; font-size: 13.5px; }
-  .comp-table th { background: var(--dark); color: #fff; padding: 12px 20px; text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
+  .comp-table th { background: var(--green-deep); color: #fff; padding: 12px 20px; text-align: left; font-size: 11px; letter-spacing: 0.1em; text-transform: uppercase; font-weight: 500; }
   .comp-table td { padding: 12px 20px; border-bottom: 1px solid var(--border); color: #444; }
   .comp-table tr:last-child td { border-bottom: none; }
   .comp-table tr:nth-child(even) td { background: rgba(0,0,0,0.015); }

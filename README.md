@@ -51,15 +51,7 @@ Feed público donde los usuarios votan si coinciden con la IA, ranking de fiabil
 
 ## Arquitectura
 
-```mermaid
-flowchart LR
-    U[Usuario] --> F["React 19 + Vite<br/>(Vercel)"]
-    F -- REST + JWT --> B["Spring Boot 3.5<br/>(Render · Docker)"]
-    B --> DB[(MySQL 8)]
-    B --> O{{Orquestador IA}}
-    O -- rotación + failover --> C["Cerebras · Gemini · Mistral<br/>SambaNova · Cloudflare"]
-    B -- dataset --> L["VeriAI<br/>fine-tuning en local"]
-```
+![Arquitectura de toVeriAI: React en Vercel, Spring Boot en Render, MySQL, orquestador de IA con 5 LLMs en rotación y VeriAI con fine-tuning en local](docs/arquitectura.svg)
 
 **Stack:** Java 17 · Spring Boot · Spring Security · JWT · JPA/Hibernate · MySQL · React 19 · Vite · Recharts · jsPDF · Docker · Ollama · Qwen · JUnit
 
