@@ -4,7 +4,7 @@
 
 **La IA que te dice cuánto puedes fiarte de una noticia, y por qué.**
 
-[**▶ Pruébala en toveriai.com**](https://www.toveriai.com)
+[**▶ Pruébala en toveriai.com**](https://www.toveriai.com) · [**👩‍💻 Conoce a la autora (portfolio)**](https://raquelccarreraa.github.io/Porfolio-raquelcarrera/)
 
 ![Java 17](https://img.shields.io/badge/Java-17-orange)
 ![Spring Boot 3.5](https://img.shields.io/badge/Spring%20Boot-3.5-6DB33F)
@@ -70,4 +70,6 @@ Feed público donde los usuarios votan si coinciden con la IA, ranking de fiabil
 
 Soy **Raquel Comesaña Carrera**, desarrolladora full stack (Java · Spring Boot · React) en A Coruña, especializándome en IA y Big Data. **Busco trabajo como desarrolladora, con disponibilidad inmediata.**
 
-[Portfolio](https://raquelccarreraa.github.io/Porfolio-raquelcarrera/) · [LinkedIn](https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195) · raquel.ccarrera@gmail.com
+👉 **Más sobre mí, mis otros proyectos y mi experiencia en mi portfolio:** [raquelccarreraa.github.io/Porfolio-raquelcarrera](https://raquelccarreraa.github.io/Porfolio-raquelcarrera/)
+
+📬 **Contacto:** [raquel.ccarrera@gmail.com](mailto:raquel.ccarrera@gmail.com) · [LinkedIn](https://www.linkedin.com/in/raquel-comesa%C3%B1a-carrera-1646ba195)

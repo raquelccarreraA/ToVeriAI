@@ -70,6 +70,37 @@
   .back-link:hover { transform: translateX(-2px); background: #fff; box-shadow: 0 10px 26px -6px rgba(18,61,46,0.45); }
   .back-link span { font-size: 16px; line-height: 1; }
 
+  /* ── ENLACE AL PORTFOLIO (arriba a la derecha) ── */
+  .portfolio-link {
+    position: fixed; top: 14px; right: 18px; z-index: 200;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 15px 9px 16px; border-radius: 999px;
+    background: #2D6A4F; color: #fff;
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 6px 20px -6px rgba(18,61,46,0.45);
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .portfolio-link:hover { transform: translateY(-1px); background: #24573f; box-shadow: 0 10px 26px -6px rgba(18,61,46,0.55); }
+  .portfolio-link span { font-size: 14px; line-height: 1; }
+  @media print { .portfolio-link { display: none; } }
+
+  /* ── SOBRE LA AUTORA ── */
+  .author-band { background: #fff; border-top: 1px solid #E6E2DC; padding: 72px 10vw; }
+  .author-inner { max-width: 980px; margin: 0 auto; display: flex; gap: 40px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .author-text { flex: 1 1 420px; }
+  .author-kicker { font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase; color: #2D6A4F; font-weight: 600; margin-bottom: 10px; }
+  .author-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 40px); font-weight: 400; line-height: 1.1; color: #1A1A1A; margin-bottom: 10px; }
+  .author-desc { font-size: 15px; color: #555; line-height: 1.75; margin: 0; max-width: 560px; }
+  .author-desc a { color: #2D6A4F; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(45,106,79,0.35); }
+  .author-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .author-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; transition: transform .2s, background .2s, box-shadow .2s; }
+  .author-btn.primary { background: #2D6A4F; color: #fff; box-shadow: 0 10px 24px -10px rgba(45,106,79,0.7); }
+  .author-btn.primary:hover { background: #24573f; transform: translateY(-2px); }
+  .author-btn.ghost { border: 1.5px solid rgba(45,106,79,0.35); color: #2D6A4F; }
+  .author-btn.ghost:hover { background: rgba(45,106,79,0.07); }
+  @media (max-width: 768px) { .author-band { padding: 56px 20px; } }
+
   /* ── PATRÓN DE PUNTOS PARA SECCIONES OSCURAS ── */
   .mesh { background: var(--mesh); position: relative; overflow: hidden; isolation: isolate; }
   .mesh::after {
@@ -336,6 +367,7 @@
 </head>
 <body>
 
+<a class="portfolio-link" href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">Portfolio <span aria-hidden="true">↗</span></a>
 <a class="back-link" href="../index.html" aria-label="Volver a la página de inicio"><span>←</span> Volver</a>
 
 <!-- ── COVER ──────────────────────────────────────── -->
@@ -847,6 +879,21 @@
     <a class="cta-url primary" href="https://www.toveriai.com">Ir a la plataforma</a>
   </div>
 </div>
+
+<!-- ── SOBRE LA AUTORA ────────────────────────────── -->
+<section class="author-band">
+  <div class="author-inner">
+    <div class="author-text">
+      <div class="author-kicker">Sobre la autora</div>
+      <div class="author-name">Raquel Comesaña Carrera</div>
+      <p class="author-desc">Desarrolladora full stack (Java · Spring Boot · React) en A Coruña, especializándome en IA y Big Data. En mi <a href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">portfolio</a> encontrarás más sobre mí, mis otros proyectos y mi experiencia. ¿Hablamos? Escríbeme a <a href="mailto:raquel.ccarrera@gmail.com">raquel.ccarrera@gmail.com</a>.</p>
+    </div>
+    <div class="author-actions">
+      <a class="author-btn primary" href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">Ver mi portfolio <span aria-hidden="true">↗</span></a>
+      <a class="author-btn ghost" href="mailto:raquel.ccarrera@gmail.com">Escríbeme</a>
+    </div>
+  </div>
+</section>
 
 </body>
 </html>

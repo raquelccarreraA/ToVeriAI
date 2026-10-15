@@ -83,6 +83,37 @@
 
   .note { border-left: 3px solid var(--green); background: rgba(45,106,79,0.07); padding: 18px 22px; font-size: 14px; color: #333; }
 
+  /* ── ENLACE AL PORTFOLIO (arriba a la derecha) ── */
+  .portfolio-link {
+    position: fixed; top: 14px; right: 18px; z-index: 200;
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 9px 15px 9px 16px; border-radius: 999px;
+    background: #2D6A4F; color: #fff;
+    font-size: 13px; font-weight: 500; text-decoration: none;
+    border: 1px solid rgba(255,255,255,0.35);
+    box-shadow: 0 6px 20px -6px rgba(18,61,46,0.45);
+    transition: transform .2s, box-shadow .2s, background .2s;
+  }
+  .portfolio-link:hover { transform: translateY(-1px); background: #24573f; box-shadow: 0 10px 26px -6px rgba(18,61,46,0.55); }
+  .portfolio-link span { font-size: 14px; line-height: 1; }
+  @media print { .portfolio-link { display: none; } }
+
+  /* ── SOBRE LA AUTORA ── */
+  .author-band { background: #fff; border: 1px solid #E6E2DC; border-radius: 18px; padding: 40px 44px; }
+  .author-inner { max-width: 980px; margin: 0 auto; display: flex; gap: 40px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .author-text { flex: 1 1 420px; }
+  .author-kicker { font-size: 10.5px; letter-spacing: 0.28em; text-transform: uppercase; color: #2D6A4F; font-weight: 600; margin-bottom: 10px; }
+  .author-name { font-family: 'Cormorant Garamond', serif; font-size: clamp(30px, 4vw, 40px); font-weight: 400; line-height: 1.1; color: #1A1A1A; margin-bottom: 10px; }
+  .author-desc { font-size: 15px; color: #555; line-height: 1.75; margin: 0; max-width: 560px; }
+  .author-desc a { color: #2D6A4F; font-weight: 500; text-decoration: none; border-bottom: 1px solid rgba(45,106,79,0.35); }
+  .author-actions { display: flex; gap: 12px; flex-wrap: wrap; }
+  .author-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 999px; font-size: 14px; font-weight: 600; text-decoration: none; transition: transform .2s, background .2s, box-shadow .2s; }
+  .author-btn.primary { background: #2D6A4F; color: #fff; box-shadow: 0 10px 24px -10px rgba(45,106,79,0.7); }
+  .author-btn.primary:hover { background: #24573f; transform: translateY(-2px); }
+  .author-btn.ghost { border: 1.5px solid rgba(45,106,79,0.35); color: #2D6A4F; }
+  .author-btn.ghost:hover { background: rgba(45,106,79,0.07); }
+  @media (max-width: 768px) { .author-band { padding: 32px 24px; } }
+
   footer { border-top: 1px solid var(--border); padding: 36px 6vw 48px; text-align: center; font-size: 14px; color: var(--muted); }
   footer strong { color: var(--dark); font-weight: 500; }
   footer nav { margin-top: 10px; display: flex; gap: 18px; justify-content: center; flex-wrap: wrap; }
@@ -98,6 +129,8 @@
 </style>
 </head>
 <body>
+
+<a class="portfolio-link" href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">Portfolio <span aria-hidden="true">↗</span></a>
 
 <header class="cover">
   <div class="eyebrow">Verificación de noticias con IA</div>
@@ -149,6 +182,20 @@
       <div class="hl"><strong>⚡ Cinco LLMs en rotación</strong><p>Cerebras, Gemini, Mistral, SambaNova y Cloudflare, con failover automático gestionado por un orquestador propio.</p></div>
       <div class="hl"><strong>🔍 Explicable</strong><p>El Índice de Métricas Interpretativas (IMI) sigue criterios de NewsGuard, IFCN y The Trust Project, y cada nota cita el artículo.</p></div>
       <div class="hl"><strong>👥 Comunidad</strong><p>Feed público con votos, ranking de medios, avisos de cambios de fiabilidad y rachas con recompensa.</p></div>
+    </div>
+  </section>
+
+  <section class="author-band">
+    <div class="author-inner">
+      <div class="author-text">
+        <div class="author-kicker">Sobre la autora</div>
+        <div class="author-name">Raquel Comesaña Carrera</div>
+        <p class="author-desc">Desarrolladora full stack (Java · Spring Boot · React) en A Coruña, especializándome en IA y Big Data. En mi <a href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">portfolio</a> encontrarás más sobre mí, mis otros proyectos y mi experiencia. ¿Hablamos? Escríbeme a <a href="mailto:raquel.ccarrera@gmail.com">raquel.ccarrera@gmail.com</a>.</p>
+      </div>
+      <div class="author-actions">
+        <a class="author-btn primary" href="https://raquelccarreraa.github.io/Porfolio-raquelcarrera/">Ver mi portfolio <span aria-hidden="true">↗</span></a>
+        <a class="author-btn ghost" href="mailto:raquel.ccarrera@gmail.com">Escríbeme</a>
+      </div>
     </div>
   </section>
 
